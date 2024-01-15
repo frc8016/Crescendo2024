@@ -38,4 +38,16 @@ public final class Constants {
 
 
   }
+
+  public static class ShooterConstants{
+
+  }
+
+  public static class IntakeConstants{
+
+  }
+
+  public static class ClimbConstants{
+    
+  }
 }
