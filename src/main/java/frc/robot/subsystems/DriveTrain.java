@@ -4,15 +4,14 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
-import edu.wpi.first.math.kinematics.DifferentialDriveWheelPositions;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveTrainConstants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
 public class DriveTrain extends SubsystemBase {
@@ -34,6 +33,13 @@ public class DriveTrain extends SubsystemBase {
     private final WPI_PigeonIMU m_gyro = new WPI_PigeonIMU(null);
     //odometry for checking robot pose/position
     private final DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(null, null, null); 
+    
+    //sysId nonsence 
+   
+
+
+
+   
 
 // new drive subsystem
 public DriveTrain(){
@@ -48,9 +54,13 @@ public DriveTrain(){
 
     resetEncoders();
 
-    new DifferentialDriveOdometry(null, m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
+    new DifferentialDriveOdometry(null, m_leftEncoder.getDistance(), m_rightEncoder.getDistance());}
 
-}
+
+
+
+
+
 
 @Override 
 public void periodic(){
