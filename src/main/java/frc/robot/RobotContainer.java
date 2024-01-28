@@ -5,14 +5,16 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -34,6 +36,7 @@ public class RobotContainer {
   private final Joystick m_Joystick = new Joystick(OperatorConstants.kJoystickPort);
 
   private final DriveTrain m_DriveTrain = new DriveTrain();
+  private final Shooter m_Shooter = new Shooter();
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -58,7 +61,15 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-
+    //run shooter 
+    m_driverController
+    .rightTrigger()
+      .whileTrue(
+        new StartEndCommand(
+          () ->m_Shooter.runShooter(ShooterConstants.SHOOTER_SPEED), 
+          ()-> m_Shooter.runShooter(0), 
+          m_Shooter));
+    
    
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     new Trigger(m_exampleSubsystem::exampleCondition)

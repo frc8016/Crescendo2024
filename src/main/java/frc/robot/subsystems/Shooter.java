@@ -12,7 +12,12 @@ public class Shooter extends SubsystemBase{
 
 
     public void runShooter(double speed){
-        m_shooterLeft.set(ShooterConstants.SHOOTER_LEFT_SPEED);
-        m_ShooterRight.set(ShooterConstants.SHOOTER_RIGHT_SPEED);
+        m_shooterLeft.set(ShooterConstants.SHOOTER_SPEED);
+        m_ShooterRight.set(ShooterConstants.SHOOTER_SPEED);
     }
+
+@Override
+public void periodic(){
+    m_ShooterRight.follow(m_shooterLeft);
+}
 }
