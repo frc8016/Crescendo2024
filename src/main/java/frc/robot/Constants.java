@@ -57,6 +57,7 @@ public final class Constants {
   }
 
   public static class ClimbConstants{
-    
+    public static final int LEFT = 1;
+    public static final int RIGHT = 1;
   }
 }
