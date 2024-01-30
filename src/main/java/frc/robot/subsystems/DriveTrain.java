@@ -1,26 +1,11 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.MutableMeasure.mutable;
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Volts;
-
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.units.Distance;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Velocity;
-import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.DriveTrainConstants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -44,45 +29,10 @@ public class DriveTrain extends SubsystemBase {
     private final Encoder m_rightEncoder = new Encoder(DriveTrainConstants.RIGHT_ENCODER_A, DriveTrainConstants.RIGHT_ENCODER_B);
 
     //gyro 
-    private final WPI_PigeonIMU m_gyro = new WPI_PigeonIMU(null);
+    private final WPI_PigeonIMU m_gyro = new WPI_PigeonIMU(DriveTrainConstants.PIGION_ID);
     //odometry for checking robot pose/position
     private final DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(null, null, null); 
     
-    //sysId nonsence 
-   private final MutableMeasure <Voltage> m_appliedVoltage = mutable(Volts.of(0));
-   private final MutableMeasure <Distance> m_distance = mutable(Meters.of(0));
-   private final MutableMeasure <Velocity<Distance>> m_velocity = mutable(MetersPerSecond.of(0));
-
-   private final SysIdRoutine m_SysIdRoutine = 
-        new SysIdRoutine(
-            // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
-          new SysIdRoutine.Config(),
-          new SysIdRoutine.Mechanism(
-        // Tell SysId how to plumb the driving voltage to the motors.
-        (Measure<Voltage> volts) -> {
-            m_frontLeft.setVoltage(volts.in(Volts));
-            m_frontRight.setVoltage(volts.in(Volts));
-        },
-         // Tell SysId how to record a frame of data for each motor on the mechanism being characterized.
-        log -> {
-            log.motor("drive-left")
-            .voltage(
-                m_appliedVoltage.mut_replace(
-                    m_frontLeft.get() * RobotController.getBatteryVoltage(), Volts))
-            .linearPosition(m_distance.mut_replace(m_leftEncoder.getDistance(), Meters))
-            .linearVelocity(
-                m_velocity.mut_replace(m_leftEncoder.getRate(), MetersPerSecond));
-
-            log.motor("drive-right")
-            .voltage(
-                m_appliedVoltage.mut_replace(
-                    m_frontRight.get() * RobotController.getBatteryVoltage(), Volts))
-            .linearPosition(m_distance.mut_replace(m_rightEncoder.getDistance(), Meters))
-            .linearVelocity(m_velocity.mut_replace(m_rightEncoder.getRate(), MetersPerSecond));
-        },
-          // Tell SysId to make generated commands require this subsystem, suffix test state in
-              // WPILog with this subsystem's name ("drive")
-         this));
 
 // new drive subsystem
 public DriveTrain(){
@@ -97,19 +47,9 @@ public DriveTrain(){
 
     resetEncoders();
 
-    new DifferentialDriveOdometry(null, m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
+    new DifferentialDriveOdometry( m_gyro.getRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
 }
 
-public Command arcadeDriveCommand(DoubleSupplier fwd, DoubleSupplier rot) {
-    return run( () -> m_drive.arcadeDrive(fwd.getAsDouble(), rot.getAsDouble()));
-}
-public Command sysIdQuasistatic(SysIdRoutine.Direction direction){
-    return m_SysIdRoutine.quasistatic(direction);
-}
-
-public Command sysIdDynamic(SysIdRoutine.Direction direction){
-    return m_SysIdRoutine.dynamic(direction);
-}
 
 @Override 
 public void periodic(){
@@ -133,7 +73,7 @@ public DifferentialDriveWheelSpeeds getWheelSpeeds() {
 public void resetOdometry(Pose2d pose) {
     resetEncoders();
     
-    m_odometry.resetPosition(null, m_leftEncoder.getDistance(),m_rightEncoder.getDistance(), pose);
+    m_odometry.resetPosition(m_gyro.getRotation2d(), m_leftEncoder.getDistance(),m_rightEncoder.getDistance(), pose);
 }
 
 //arcade drive (actually drives the robot!)

@@ -21,7 +21,7 @@ public final class Constants {
   }
 
   public static class DriveTrainConstants {
-    //drivetrain motors
+    //drivetrain motor controller id
     public static final int FRONT_LEFT_ID = 1;
     public static final int BACK_LEFT_ID = 1;
     public static final int FRONT_RIGHT_ID = 1;
@@ -37,19 +37,17 @@ public final class Constants {
 
     public static final double kEncoderDistencePerPulse = 1;
 
-
+    //pigion id 
+    public static final int PIGION_ID = 0; 
   }
 
   public static class ShooterConstants{
-    //ID
+    //motor controller id
     public static final int SHOOTER_LEFT = 1; 
     public static final int SHOOTER_RIGHT = 2;
     //speeds
-    public static final double SHOOTER_SPEED = .3; 
-    
-
-
-
+    public static final double SHOOTER_SPEED_LEFT = .3; 
+    public static final double SHOOTER_SPEED_RIGHT = -.3;
   }
 
   public static class IntakeConstants{
@@ -57,7 +55,10 @@ public final class Constants {
   }
 
   public static class ClimbConstants{
+    //motor controller id
     public static final int LEFT = 1;
     public static final int RIGHT = 1;
+    //speed
+    public static final double CLIMB_SPEED = 0;
   }
 }

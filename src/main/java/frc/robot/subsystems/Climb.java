@@ -15,16 +15,21 @@ public class Climb extends SubsystemBase{
 public Climb(){
 
 }
-//set the idle mode to brake 
+//set the idle mode to brake, hold robot on chain 
 public void setIdleMode(){
     m_left.setIdleMode(IdleMode.kBrake);
     m_right.setIdleMode(IdleMode.kBrake);
 }
-//move the climb
-public void setClimbSpeed(double speed){
-    m_left.set(speed);
+//raise the hook -- hooks rise to grab chain 
+public void raiseClimb(double leftSpeed, double rightSpeed){
+    m_left.set(leftSpeed);
+    m_right.set(rightSpeed);
 }
-
+//lower clim -- robot climbs on the chain 
+public void lowerClimb(double leftSpeed, double rightSpeed){
+    m_left.set(-leftSpeed);
+    m_right.set(-rightSpeed);
+}
 
 @Override
 public void periodic(){
