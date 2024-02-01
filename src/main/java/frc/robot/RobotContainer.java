@@ -6,8 +6,6 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.subsystems.Climb;
-import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -33,20 +31,15 @@ public class RobotContainer {
 
   private final Joystick m_Joystick = new Joystick(OperatorConstants.kJoystickPort);
 
-  private final DriveTrain m_DriveTrain = new DriveTrain();
+ 
   private final Shooter m_Shooter = new Shooter();
-  private final Climb m_Climb = new Climb();
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
     
-    m_DriveTrain.setDefaultCommand(
-      new RunCommand(
-        () -> m_DriveTrain.arcadeDrive(
-          m_Joystick.getRawAxis(OperatorConstants.JOYSTICK_Y_AXIS),
-          m_Joystick.getRawAxis(OperatorConstants.JOYSTIC_X_AXIS)),
-       m_DriveTrain));
+   
 
   }
 
@@ -61,14 +54,19 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //run shooter 
-    m_driverController
-    .rightTrigger()
-      .whileTrue(
-        new StartEndCommand(
-          () ->m_Shooter.runShooter(ShooterConstants.SHOOTER_SPEED_LEFT, ShooterConstants.SHOOTER_SPEED_RIGHT), 
-          ()-> m_Shooter.runShooter(0, 0), 
+   m_driverController
+    .leftBumper()
+    .whileTrue(
+      new StartEndCommand(
+        () -> 
+          m_Shooter.runShooter(
+            ShooterConstants.SHOOTER_SPEED_LEFT,
+            ShooterConstants.SHOOTER_SPEED_RIGHT),
+        () -> 
+          m_Shooter.runShooter(0,0),
           m_Shooter));
     
+      
     //climb
  
    

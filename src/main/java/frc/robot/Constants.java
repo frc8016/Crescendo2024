@@ -15,17 +15,15 @@ package frc.robot;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 1;
-    public static final int kJoystickPort = 1;
-    public static final int JOYSTICK_Y_AXIS = 1;
-    public static final int JOYSTIC_X_AXIS = 1;
-  }
-
-  public static class DriveTrainConstants {
+    public static final int kJoystickPort = 2;
+    public static final int JOYSTICK_Y_AXIS = 3;
+    public static final int JOYSTIC_X_AXIS = 4;
+  }/*public static class DriveTrainConstants {
     //drivetrain motor controller id
-    public static final int FRONT_LEFT_ID = 1;
-    public static final int BACK_LEFT_ID = 1;
-    public static final int FRONT_RIGHT_ID = 1;
-    public static final int BACK_RIGHT_ID = 1;
+    public static final int FRONT_LEFT_ID = 3;
+    public static final int BACK_LEFT_ID = 4;
+    public static final int FRONT_RIGHT_ID = 5;
+    public static final int BACK_RIGHT_ID = 6;
     
     //encoder constants 
     public static final int RIGHT_ENCODER_A = 1;
@@ -41,14 +39,6 @@ public final class Constants {
     public static final int PIGION_ID = 0; 
   }
 
-  public static class ShooterConstants{
-    //motor controller id
-    public static final int SHOOTER_LEFT = 1; 
-    public static final int SHOOTER_RIGHT = 2;
-    //speeds
-    public static final double SHOOTER_SPEED_LEFT = .3; 
-    public static final double SHOOTER_SPEED_RIGHT = -.3;
-  }
 
   public static class IntakeConstants{
     public static final int BEAM_BREAK_ID = 1;
@@ -57,9 +47,21 @@ public final class Constants {
 
   public static class ClimbConstants{
     //motor controller id
-    public static final int LEFT = 1;
-    public static final int RIGHT = 1;
+    public static final int LEFT = 7;
+    public static final int RIGHT = 8;
     //speed
     public static final double CLIMB_SPEED = 0;
   }
 }
+*/
+
+  public static class ShooterConstants{
+    //motor controller id
+    public static final int SHOOTER_LEFT = 2; 
+    public static final int SHOOTER_RIGHT = 1;
+    //speeds
+    public static final double SHOOTER_SPEED_LEFT = -.3; 
+    public static final double SHOOTER_SPEED_RIGHT = .3;
+  }}
+
+  
