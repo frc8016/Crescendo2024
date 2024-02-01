@@ -51,6 +51,7 @@ public final class Constants {
   }
 
   public static class IntakeConstants{
+    public static final int BEAM_BREAK_ID = 1;
 
   }
 
