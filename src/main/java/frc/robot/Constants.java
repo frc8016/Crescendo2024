@@ -4,6 +4,11 @@
 
 package frc.robot;
 
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
+
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -59,5 +64,14 @@ public final class Constants {
   public static class ClimbConstants{
     public static final int LEFT = 1;
     public static final int RIGHT = 1;
+  }
+  public static class autonomousConstants{
+        private final CANSparkMax frontLeftAuto = new CANSparkMax(DriveTrainConstants.FRONT_LEFT_ID, MotorType.kBrushless);
+    private final CANSparkMax backLeftAuto = new CANSparkMax(DriveTrainConstants.BACK_LEFT_ID, MotorType.kBrushless);
+    private final CANSparkMax frontRightAuto = new CANSparkMax(DriveTrainConstants.FRONT_RIGHT_ID, MotorType.kBrushless);
+    private final CANSparkMax backRightAuto = new CANSparkMax(DriveTrainConstants.BACK_RIGHT_ID, MotorType.kBrushless);
+    
+    private final DifferentialDrive backAutoDifferentialDrive = new DifferentialDrive(backLeftAuto, backRightAuto);
+    private final DifferentialDrive frontAutDifferentialDrive = new DifferentialDrive(frontLeftAuto, frontRightAuto);
   }
 }

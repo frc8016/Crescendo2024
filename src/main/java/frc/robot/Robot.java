@@ -7,6 +7,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.DriveTrainConstants;
+import frc.robot.Constants.autonomousConstants;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.Timer;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -19,14 +25,33 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+     /* Auto totrial */
+    private final CANSparkMax frontLeftAuto = new CANSparkMax(DriveTrainConstants.FRONT_LEFT_ID, MotorType.kBrushless);
+    private final CANSparkMax backLeftAuto = new CANSparkMax(DriveTrainConstants.BACK_LEFT_ID, MotorType.kBrushless);
+    private final CANSparkMax frontRightAuto = new CANSparkMax(DriveTrainConstants.FRONT_RIGHT_ID, MotorType.kBrushless);
+    private final CANSparkMax backRightAuto = new CANSparkMax(DriveTrainConstants.BACK_RIGHT_ID, MotorType.kBrushless);
+    
+    private final DifferentialDrive backAutoDifferentialDrive = new DifferentialDrive(backLeftAuto, backRightAuto);
+    private final DifferentialDrive frontAutDifferentialDrive = new DifferentialDrive(frontLeftAuto, frontRightAuto);
+
+    private final Timer timerAuto = new Timer();
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
+  
   @Override
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+
+    /* Auto totrial  / Ask Caroline about inverteds  */
+    frontLeftAuto.setInverted(true);
+    backLeftAuto.setInverted(true);
+    frontRightAuto.setInverted(false);
+    backRightAuto.setInverted(false);
+
+    timerAuto.start();
     m_robotContainer = new RobotContainer();
   }
 
@@ -58,15 +83,35 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
+    /* Auto totrial */
+     timerAuto.reset();
+
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+    
   }
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+   /* Auto totoral  */
+
+    backAutoDifferentialDrive.tankDrive(.5, .5);
+    frontAutDifferentialDrive.tankDrive(.5, .5);
+
+    if(timerAuto.get() < 2.0){
+     backAutoDifferentialDrive.tankDrive(.5, .5);
+     frontAutDifferentialDrive.tankDrive(.5, .5);
+    } 
+    else{
+      backAutoDifferentialDrive.tankDrive(0, .0);
+      frontAutDifferentialDrive.tankDrive(.0, .0);
+
+    }
+  }
+  
 
   @Override
   public void teleopInit() {
