@@ -9,6 +9,8 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -54,19 +56,30 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //run shooter 
-   m_driverController
-    .leftBumper()
+    m_driverController
+    .rightTrigger()
     .whileTrue(
-      new StartEndCommand(
-        () -> 
-          m_Shooter.runShooter(
-            ShooterConstants.SHOOTER_SPEED_LEFT,
-            ShooterConstants.SHOOTER_SPEED_RIGHT),
-        () -> 
-          m_Shooter.runShooter(0,0),
-          m_Shooter));
-    
+      new StartEndCommand(() -> m_Shooter.runShooter(ShooterConstants.SHOOTER_SPEED_LEFT, ShooterConstants.SHOOTER_SPEED_RIGHT), 
+      () -> m_Shooter.runShooter(0, 0), m_Shooter));
+
       
+          m_driverController
+          .rightBumper()
+          .whileTrue(
+            Commands.run(
+              () -> m_Shooter.runShooter(ShooterConstants.SHOOTER_SPEED_LEFT, ShooterConstants.SHOOTER_SPEED_RIGHT), m_Shooter));
+
+          m_driverController
+          .leftBumper()
+          .onTrue(
+            Commands.run( 
+              () -> m_Shooter.runShooter(0, 0), m_Shooter));
+
+
+
+     
+           
+           
     //climb
  
    

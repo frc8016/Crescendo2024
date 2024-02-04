@@ -60,8 +60,8 @@ public final class Constants {
     public static final int SHOOTER_LEFT = 2; 
     public static final int SHOOTER_RIGHT = 1;
     //speeds
-    public static final double SHOOTER_SPEED_LEFT = -.3; 
-    public static final double SHOOTER_SPEED_RIGHT = .3;
+    public static final double SHOOTER_SPEED_LEFT = -.5; 
+    public static final double SHOOTER_SPEED_RIGHT = .5;
   }}
 
   
