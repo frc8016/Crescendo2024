@@ -45,9 +45,15 @@ public final class Constants {
     //motor controller id
     public static final int SHOOTER_LEFT = 1; 
     public static final int SHOOTER_RIGHT = 2;
+    public static final int INDEX_ID = 0; 
     //speeds
     public static final double SHOOTER_SPEED_LEFT = .3; 
     public static final double SHOOTER_SPEED_RIGHT = -.3;
+    public static final double INDEX_SPEED = .3;
+    //ultrasonic sensor ids
+    public static final int DISTANCE_SENSOR_1 = 0;
+    public static final int DISTANCE_SENSOR_2 = 0;
+
   }
 
   public static class IntakeConstants{
