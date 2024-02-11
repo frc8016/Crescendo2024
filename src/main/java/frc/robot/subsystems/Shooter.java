@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 
@@ -14,9 +13,8 @@ public class Shooter extends SubsystemBase{
     //index motor 
     private final CANSparkMax m_index = new CANSparkMax(ShooterConstants.INDEX_ID, MotorType.kBrushless);
     //ultrasonic sensor 
-    private final Ultrasonic m_distanceSensor = new Ultrasonic(ShooterConstants.DISTANCE_SENSOR_1, ShooterConstants.DISTANCE_SENSOR_2);
-    //get the distance from the range sensor in milimeters 
-    public double distanceMilimeters = m_distanceSensor.getRangeMM();
+    
+
     
     //runs the shooter
     public void runShooter(double leftSpeed, double rightSpeed){

@@ -50,14 +50,14 @@ public final class Constants {
     public static final double SHOOTER_SPEED_LEFT = .3; 
     public static final double SHOOTER_SPEED_RIGHT = -.3;
     public static final double INDEX_SPEED = .3;
-    //ultrasonic sensor ids
-    public static final int DISTANCE_SENSOR_1 = 0;
-    public static final int DISTANCE_SENSOR_2 = 0;
+    //beambreak id
+    public static final int BEAM_BREAK_SHOOTER_ID = 0;
+  
 
   }
 
   public static class IntakeConstants{
-    public static final int BEAM_BREAK_ID = 1;
+    public static final int BEAM_BREAK_INTAKE_ID = 1;
 
   }
 
