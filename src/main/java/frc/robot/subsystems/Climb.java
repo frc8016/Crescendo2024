@@ -19,16 +19,15 @@ public Climb(){
 public void setIdleMode(){
     m_left.setIdleMode(IdleMode.kBrake);
     m_right.setIdleMode(IdleMode.kBrake);
+
+    m_left.burnFlash();
+    m_right.burnFlash();
 }
-//raise the hook -- hooks rise to grab chain 
-public void raiseClimb(double leftSpeed, double rightSpeed){
+
+public void setClimbSpeed(double leftSpeed, double rightSpeed){
     m_left.set(leftSpeed);
     m_right.set(rightSpeed);
-}
-//lower clim -- robot climbs on the chain 
-public void lowerClimb(double leftSpeed, double rightSpeed){
-    m_left.set(-leftSpeed);
-    m_right.set(-rightSpeed);
+
 }
 
 @Override

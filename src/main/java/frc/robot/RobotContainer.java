@@ -6,6 +6,9 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.commands.LowerClimb;
+import frc.robot.commands.RaiseClimb;
+import frc.robot.commands.RunShooter;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Shooter;
@@ -38,6 +41,9 @@ public class RobotContainer {
   private final DriveTrain m_DriveTrain = new DriveTrain();
   private final Shooter m_Shooter = new Shooter();
   private final Climb m_Climb = new Climb();
+  private final RaiseClimb m_RaiseClimb = new RaiseClimb(m_Climb);
+  private final LowerClimb m_LowerClimb = new LowerClimb(m_Climb);
+  private final RunShooter m_RunShooter = new RunShooter(m_Shooter);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -65,24 +71,12 @@ public class RobotContainer {
     //run shooter (turns on the shooter, 
     //waits x seconds to let shooter get up to speed, 
     //feeds note into shooter)
-    m_driverController
-    .rightTrigger()
-      .onTrue(
-        Commands.sequence(
-          new StartEndCommand(
-            () ->m_Shooter.runShooter(ShooterConstants.SHOOTER_SPEED_LEFT, ShooterConstants.SHOOTER_SPEED_RIGHT), 
-            ()-> m_Shooter.runShooter(0, 0), 
-            m_Shooter),
-          new WaitCommand(2), 
-          new StartEndCommand(
-            () -> m_Shooter.runIndex(ShooterConstants.INDEX_SPEED),
-            () -> m_Shooter.runIndex(0),
-            m_Shooter),
-          new WaitCommand(2)
-        ));
-    
+    m_driverController.rightTrigger().onTrue(m_RunShooter);
+   
+       
     //climb
- 
+    m_driverController.x().onTrue(m_RaiseClimb);
+    m_driverController.y().onTrue(m_LowerClimb);
   }
 
   /**
