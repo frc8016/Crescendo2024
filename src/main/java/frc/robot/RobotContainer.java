@@ -5,15 +5,17 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.LowerClimb;
 import frc.robot.commands.RaiseClimb;
-import frc.robot.commands.RunShooter;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -26,18 +28,18 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-
-
-  // Replace with CommandPS4Controller or CommandJoystick if needed
+//Controllers 
   private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final Joystick m_Joystick = new Joystick(OperatorConstants.kJoystickPort);
+//subsystems 
   private final DriveTrain m_DriveTrain = new DriveTrain();
   private final Shooter m_Shooter = new Shooter();
   private final Climb m_Climb = new Climb();
-
+  private final Intake m_Intake = new Intake();
+//commands 
   private final RaiseClimb m_RaiseClimb = new RaiseClimb(m_Climb);
   private final LowerClimb m_LowerClimb = new LowerClimb(m_Climb);
-  private final RunShooter m_RunShooter = new RunShooter(m_Shooter);
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -49,7 +51,6 @@ public class RobotContainer {
           m_Joystick.getRawAxis(OperatorConstants.JOYSTICK_Y_AXIS),
           m_Joystick.getRawAxis(OperatorConstants.JOYSTIC_X_AXIS)),
        m_DriveTrain));
-
   }
 
   /**
@@ -62,12 +63,21 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    //run shooter (turns on the shooter, 
-    //waits x seconds to let shooter get up to speed, 
-    //feeds note into shooter)
-    m_driverController.rightTrigger().onTrue(m_RunShooter);
-   
-    //climb
+   /*shooter */
+
+  /*intake */
+    //Extend Intake 
+    m_driverController
+    .rightBumper()
+    .onTrue(
+      new RunCommand(() -> m_Intake.extendIntake(), m_Intake));
+    //Retract intake
+      m_driverController
+      .leftBumper()
+      .onTrue(
+        new RunCommand(() -> m_Intake.retractIntake(), m_Intake));
+    
+    /*climb*/
     m_driverController.x().onTrue(m_RaiseClimb);
     m_driverController.y().onTrue(m_LowerClimb);
   }

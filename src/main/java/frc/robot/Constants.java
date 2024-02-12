@@ -59,6 +59,13 @@ public final class Constants {
   public static class IntakeConstants{
     public static final int BEAM_BREAK_INTAKE_ID = 1;
 
+    public static final int INTAKE_MOTOR = 0; 
+
+    public static final int SOLENOID_LEFT_FWD = 1;
+    public static final int SOLENOID_LEFT_BKW = 2;
+    public static final int SOLENOID_RIGHT_FWD = 3;
+    public static final int SOLENOiD_RIGHT_BKW = 4;
+
   }
 
   public static class ClimbConstants{
