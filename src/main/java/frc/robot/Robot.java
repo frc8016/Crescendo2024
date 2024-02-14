@@ -10,8 +10,14 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.DriveTrainConstants;
 import frc.robot.Constants.autonomousConstants;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import java.text.BreakIterator;
+
+import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.Timer;
 
 /**
@@ -23,8 +29,16 @@ import edu.wpi.first.wpilibj.Timer;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-
+  /*list of Autos we can use  */
+  private static final String kDefaultAuto = "Default"; /* works when robot is in the middle */  
+  private static final String kCusatomAuto = "My Auto"; 
   private RobotContainer m_robotContainer;
+
+  /* makes a long stringout of the Strings above */
+  private String m_autoSelected;
+
+  /* sends Auto strings to dashbord */
+  private final SendableChooser<String> m_Chooser = new SendableChooser<>();
 
      /* Auto totrial */
     private final CANSparkMax frontLeftAuto = new CANSparkMax(DriveTrainConstants.FRONT_LEFT_ID, MotorType.kBrushless);
@@ -34,6 +48,9 @@ public class Robot extends TimedRobot {
     
     private final DifferentialDrive backAutoDifferentialDrive = new DifferentialDrive(backLeftAuto, backRightAuto);
     private final DifferentialDrive frontAutDifferentialDrive = new DifferentialDrive(frontLeftAuto, frontRightAuto);
+
+    private final PWMSparkMax feedWheel = new PWMSparkMax(0);
+    private final PWMSparkMax lauchWheel = new PWMSparkMax(0);
 
     private final Timer timerAuto = new Timer();
   /**
@@ -45,7 +62,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-
+    m_Chooser.setDefaultOption("Default", kDefaultAuto);
+    m_Chooser.addOption("My Auto", kCusatomAuto);
     /* Auto totrial  / Ask Caroline about inverteds  */
     frontLeftAuto.setInverted(true);
     backLeftAuto.setInverted(true);
@@ -98,10 +116,17 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
    /* Auto totoral  */
+    switch (m_autoSelected) {
+      case kCusatomAuto:
+      if(timerAuto.get() < 1 ){
+        lauchWheel.set(1);
+      }
+      else if(timerAuto.get()< 2){ // trun on feed
 
-    backAutoDifferentialDrive.tankDrive(.5, .5);
-    frontAutDifferentialDrive.tankDrive(.5, .5);
-
+      }
+     break;
+      case kDefaultAuto:
+    default:
     if(timerAuto.get() < 2.0){
      backAutoDifferentialDrive.tankDrive(.5, .5);
      frontAutDifferentialDrive.tankDrive(.5, .5);
@@ -109,8 +134,15 @@ public class Robot extends TimedRobot {
     else{
       backAutoDifferentialDrive.tankDrive(0, .0);
       frontAutDifferentialDrive.tankDrive(.0, .0);
-
+  
     }
+    break;
+      
+    }
+    backAutoDifferentialDrive.tankDrive(.5, .5);
+    frontAutDifferentialDrive.tankDrive(.5, .5);
+    
+    
   }
   
 
