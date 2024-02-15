@@ -69,6 +69,9 @@ public class Robot extends TimedRobot {
     backLeftAuto.setInverted(true);
     frontRightAuto.setInverted(false);
     backRightAuto.setInverted(false);
+    // this program is if the motors are inverted
+    feedWheel.setInverted(true);
+    lauchWheel.setInverted(true);
 
     timerAuto.start();
     m_robotContainer = new RobotContainer();
@@ -117,12 +120,26 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
    /* Auto totoral  */
     switch (m_autoSelected) {
-      case kCusatomAuto:
-      if(timerAuto.get() < 1 ){
+      case kCusatomAuto: // check if motors are sping the right way
+      
+      if(timerAuto.get() < 2.0){
+     backAutoDifferentialDrive.tankDrive(.5, .5);
+     frontAutDifferentialDrive.tankDrive(.5, .5);
+    } 
+    else{
+      backAutoDifferentialDrive.tankDrive(0, .0);
+      frontAutDifferentialDrive.tankDrive(.0, .0);
+  
+    }
+      if(timerAuto.get() < 2.0 ){
         lauchWheel.set(1);
       }
-      else if(timerAuto.get()< 2){ // trun on feed
-
+      else if(timerAuto.get()< 3.5){ // trun on feed
+         feedWheel.set(1);
+      }
+      else { // done turn off motor
+        lauchWheel.set(0);
+        feedWheel.set(0);
       }
      break;
       case kDefaultAuto:
