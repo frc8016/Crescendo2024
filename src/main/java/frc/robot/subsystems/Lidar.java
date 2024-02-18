@@ -40,7 +40,7 @@ import edu.wpi.first.wpilibj.I2C.Port;
 public class Lidar { // We don't need any pid system, So I took out the code where LIDAR
                                 // inherits from a PID system
     private I2C i2c;
-    private byte[] distance;
+    private static byte[] distance;
     private java.util.Timer updater;
     private final int LIDAR_ADDR = 0x62;
     private final int LIDAR_CONFIG_REGISTER = 0x00;
@@ -59,7 +59,7 @@ public class Lidar { // We don't need any pid system, So I took out the code whe
      * 
      * @return distance in cm
      */
-    private int getDistance() { // private cuz I don't want people interacting directly with the
+    private static int getDistance() { // private cuz I don't want people interacting directly with the
                                 // buffer...yah...
         return (int) Integer.toUnsignedLong(distance[0] << 8) + Byte.toUnsignedInt(distance[1]);
     }
@@ -70,7 +70,7 @@ public class Lidar { // We don't need any pid system, So I took out the code whe
      * 
      * @return distance in inches
      */
-    public double getDistanceMM() { // I made this function better. It used to be part of a PID
+    public static double getDistanceMM() { // I made this function better. It used to be part of a PID
                                     // system. We didn't need a PID system.
         return (double) getDistance(); // inches cuz Merica.
     }

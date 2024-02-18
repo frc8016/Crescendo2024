@@ -1,5 +1,8 @@
 package frc.robot.subsystems;
 
+/*climb shoudl be done 
+ * 2 commands, one raises, one lowers, they should lock 
+ */
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -27,7 +30,6 @@ public void setIdleMode(){
 public void setClimbSpeed(double leftSpeed, double rightSpeed){
     m_left.set(leftSpeed);
     m_right.set(rightSpeed);
-
 }
 
 @Override

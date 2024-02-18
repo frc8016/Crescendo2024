@@ -9,13 +9,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveTrainConstants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
- 
-
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
 public class DriveTrain extends SubsystemBase {
-    
-   
     //motor controllers 
     private final CANSparkMax m_frontLeft = new CANSparkMax(DriveTrainConstants.FRONT_LEFT_ID, MotorType.kBrushless);
     private final CANSparkMax m_backLeft = new CANSparkMax(DriveTrainConstants.BACK_LEFT_ID, MotorType.kBrushless);
@@ -39,8 +35,8 @@ public DriveTrain(){
     m_backLeft.follow(m_frontLeft);
     m_backRight.follow(m_frontRight);
     //invert one side of drivetrain 
-    m_frontLeft.setInverted(false);
-    m_frontRight.setInverted(true);
+    m_frontLeft.setInverted(true);
+    m_frontRight.setInverted(false);
     //set encoders distance per pulse 
     m_leftEncoder.setDistancePerPulse(DriveTrainConstants.kEncoderDistencePerPulse);
     m_rightEncoder.setDistancePerPulse(DriveTrainConstants.kEncoderDistencePerPulse);
