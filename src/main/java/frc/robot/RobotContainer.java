@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -31,7 +32,7 @@ public class RobotContainer {
 
   private final Joystick m_Joystick = new Joystick(OperatorConstants.kJoystickPort);
 
- 
+ private final Intake m_Intake = new Intake();
   private final Shooter m_Shooter = new Shooter();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -61,18 +62,11 @@ public class RobotContainer {
       () -> m_Shooter.runShooter(0, 0), m_Shooter));
 
       
-          m_driverController
-          .rightBumper()
-          .whileTrue(
-            Commands.run(
-              () -> m_Shooter.runShooter(ShooterConstants.SHOOTER_SPEED_LEFT, ShooterConstants.SHOOTER_SPEED_RIGHT), m_Shooter));
-
-          m_driverController
-          .leftBumper()
-          .onTrue(
-            Commands.run( 
-              () -> m_Shooter.runShooter(0, 0), m_Shooter));
-
+     m_driverController
+     .leftTrigger()
+     .whileTrue(
+      new StartEndCommand(() -> m_Intake.runIntake(ShooterConstants.INTAKE_SPEED), 
+      () -> m_Intake.runIntake(0), m_Intake));
 
 
      

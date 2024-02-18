@@ -8,14 +8,7 @@ import frc.robot.Constants.ShooterConstants;
 public class Shooter extends SubsystemBase{
     private final CANSparkMax m_shooterLeft = new CANSparkMax(ShooterConstants.SHOOTER_LEFT, MotorType.kBrushless);
     private final CANSparkMax m_ShooterRight = new CANSparkMax(ShooterConstants.SHOOTER_RIGHT, MotorType.kBrushless);
-
-    public void runLeft(double leftspeed){
-        m_shooterLeft.set(leftspeed);
-    }
-
-    public void runRight(double rightSpeed){
-        m_ShooterRight.set(rightSpeed);
-    }
+   
 
     public void runShooter(double leftSpeed, double rightSpeed){
         m_shooterLeft.set(leftSpeed);
