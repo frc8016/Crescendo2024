@@ -18,13 +18,11 @@ public class Shooter extends SubsystemBase{
     private final CANSparkMax m_index = new CANSparkMax(ShooterConstants.INDEX_ID, MotorType.kBrushless);
     //beam break
     private final DigitalInput m_shooterBB = new DigitalInput(ShooterConstants.BEAM_BREAK_SHOOTER_ID);
- 
     //runs the shooter
     public void runShooter(double speed){
         m_shooterLeft.set(speed);
         m_ShooterRight.set(-speed);
     }
-
     //run the index
     public void runIndex(double speed){
         m_index.set(speed);
@@ -38,23 +36,15 @@ public class Shooter extends SubsystemBase{
             System.out.println("note in shooter");
         }
     }
-//attempting to set the speed based on the lidar reading 
-  public  double setShooterSpeed(double shooterSpeed){
-        if(Lidar.getDistanceMM() >= 500){
-          runShooter(1);
-        }else if(Lidar.getDistanceMM() > 250){
-            runShooter(.8);
-        }else if(Lidar.getDistanceMM() >= 100){
-            runShooter(.6);
-        }else if(Lidar.getDistanceMM() < 50){
-            runShooter(.5);
-        }
-        return shooterSpeed;
+  
+  public void getLidarDistance(){
+      Lidar.getDistanceMM();
+      System.out.println(Lidar.getDistanceMM());
     }
+
     @Override 
     public void periodic(){
        SmartDashboard.putBoolean("Shooter Beam Break", shooterBeamBroken());
-      // SmartDashboard.putNumber("Shooter Speed", setShooterSpeed());
        shooterBeamBrokenTrue();
     }
 

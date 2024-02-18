@@ -44,7 +44,7 @@ public final class Constants {
     //motor controller id
     public static final int SHOOTER_LEFT = 1; 
     public static final int SHOOTER_RIGHT = 2;
-    public static final int INDEX_ID = 0; 
+    public static final int INDEX_ID = 3; 
     //speeds
     public static final double SHOOTER_SPEED_LEFT = .3; 
     public static final double SHOOTER_SPEED_RIGHT = -.3;

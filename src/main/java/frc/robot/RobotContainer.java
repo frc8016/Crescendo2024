@@ -12,10 +12,14 @@ import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import javax.sound.midi.Sequence;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -64,6 +68,20 @@ public class RobotContainer {
    */
   private void configureBindings() {
    /*shooter */
+   m_driverController
+   .x()
+   .onTrue(
+    SequencialCommandGroup(
+       new RunCommand(() -> m_Shooter.runShooter(ShooterConstants.SHOOTER_SPEED_LEFT)),
+       new WaitCommand(2),
+       new RunCommand(() -> m_Shooter.runIndex(ShooterConstants.INDEX_SPEED)),
+       new WaitCommand(4)//,
+      // new ParallelCommandGroup(
+        //new RunCommand(() -> m_Shooter.runShooter(0)), 
+      //  new  RunCommand(() -> m_Shooter.runIndex(0))
+        //)
+
+       ));
 
   /*intake */
     //Extend Intake 
@@ -80,6 +98,17 @@ public class RobotContainer {
     /*climb*/
     m_driverController.x().onTrue(m_RaiseClimb);
     m_driverController.y().onTrue(m_LowerClimb);
+  }
+
+  private Object end() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'end'");
+  }
+
+  private Command SequencialCommandGroup(RunCommand runCommand, WaitCommand waitCommand, RunCommand runCommand2,
+      WaitCommand waitCommand2) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'SequencialCommandGroup'");
   }
 
   /**

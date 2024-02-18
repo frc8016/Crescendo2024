@@ -12,15 +12,15 @@ public class LowerClimb extends Command{
     public LowerClimb(Climb climb){
        
     }
-
+    @Override
     public void initialize(){}
 
-    
+    @Override
     public void execute(){
         m_Climb.setClimbSpeed(-ClimbConstants.CLIMB_SPEED, -ClimbConstants.CLIMB_SPEED);
     }
 
-
+    @Override
     public void end(boolean interrupted){
         m_Climb.setClimbSpeed(0, 0);
     }
