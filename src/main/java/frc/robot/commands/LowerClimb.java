@@ -7,10 +7,11 @@ import frc.robot.subsystems.Climb;
 
 //lowers the climb onto teh chain to raise the robot
 public class LowerClimb extends Command{
-     private Climb m_Climb = new Climb();
+     private Climb m_Climb;
 
     public LowerClimb(Climb climb){
-       
+       m_Climb = climb;
+       addRequirements(climb);
     }
     @Override
     public void initialize(){}

@@ -6,10 +6,12 @@ import frc.robot.subsystems.Climb;
 
 //raises the climb to the correct hight to get on the chain 
 public class RaiseClimb extends Command{
-    private Climb m_Climb = new Climb();
+    private Climb m_Climb;
+  
 
     public RaiseClimb(Climb climb){
-       
+       m_Climb = climb;
+       addRequirements(climb);
     }
     @Override
     public void initialize(){}

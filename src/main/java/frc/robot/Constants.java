@@ -46,8 +46,8 @@ public final class Constants {
     public static final int SHOOTER_RIGHT = 2;
     public static final int INDEX_ID = 3; 
     //speeds
-    public static final double SHOOTER_SPEED_LEFT = .3; 
-    public static final double SHOOTER_SPEED_RIGHT = -.3;
+    public static final double SHOOTER_SPEED = .3; 
+  
     public static final double INDEX_SPEED = .3;
     //beambreak id
     public static final int BEAM_BREAK_SHOOTER_ID = 0;

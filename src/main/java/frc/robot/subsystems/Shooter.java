@@ -40,12 +40,14 @@ public class Shooter extends SubsystemBase{
   public void getLidarDistance(){
       Lidar.getDistanceMM();
       System.out.println(Lidar.getDistanceMM());
+      SmartDashboard.putNumber("Lidar Distance", Lidar.getDistanceMM());
     }
 
     @Override 
     public void periodic(){
        SmartDashboard.putBoolean("Shooter Beam Break", shooterBeamBroken());
        shooterBeamBrokenTrue();
+       getLidarDistance();
     }
 
 }
