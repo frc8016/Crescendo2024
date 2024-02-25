@@ -15,8 +15,8 @@ import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
     //pnumatic cylenders 
-    private final DoubleSolenoid m_solenoidLeft = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, IntakeConstants.SOLENOID_LEFT_FWD, IntakeConstants.SOLENOID_LEFT_BKW);
-    private final DoubleSolenoid m_solenoidRight = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, IntakeConstants.SOLENOID_RIGHT_FWD, IntakeConstants.SOLENOiD_RIGHT_BKW);
+    private final DoubleSolenoid m_solenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, IntakeConstants.SOLENOID_LEFT_FWD, IntakeConstants.SOLENOID_LEFT_BKW);
+  
     //neo for the rollers
     private final CANSparkMax m_intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_MOTOR, MotorType.kBrushless);
     //Beam breaks
@@ -28,18 +28,18 @@ public void runIntake(double speed){
 }
 //extends intake over the bumpers using pnumatics
 public void extendIntake(){
-    m_solenoidLeft.set(DoubleSolenoid.Value.kForward);
-    m_solenoidRight.set(DoubleSolenoid.Value.kForward);
+    m_solenoid.set(DoubleSolenoid.Value.kForward);
+   
 }
 //retract intake into starting position using pnumatics
 public void retractIntake(){
-    m_solenoidLeft.set(DoubleSolenoid.Value.kReverse);
-    m_solenoidRight.set(DoubleSolenoid.Value.kReverse);
+    m_solenoid.set(DoubleSolenoid.Value.kReverse);
+   
 }
 //turns off the intake pnumatics
 public void intakeOff(){
-    m_solenoidLeft.set(DoubleSolenoid.Value.kOff);
-    m_solenoidRight.set(DoubleSolenoid.Value.kOff);
+    m_solenoid.set(DoubleSolenoid.Value.kOff);
+    
 }
 public boolean beamBroken(){
     return !m_IntakeBB1.get() && !m_IntakeBB2.get();
