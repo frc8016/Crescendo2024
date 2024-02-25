@@ -14,15 +14,12 @@ import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
-import javax.sound.midi.Sequence;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -86,13 +83,34 @@ public class RobotContainer {
    /*shooter */
   m_driverController
   .x()
-  .onTrue(
+  .whileTrue(
     new ParallelCommandGroup(
       m_RunShooter, 
       new WaitCommand(2),
-      m_RunIndexToShoot,
-      new WaitCommand(3)
+      m_RunIndexToShoot
       ));
+
+      //for testings 
+      /*Run shooter */
+      m_driverController
+      .a()
+      .whileTrue(
+        new StartEndCommand(
+          () -> m_Shooter.runShooter(ShooterConstants.SHOOTER_SPEED), 
+          () -> m_Shooter.runShooter(0), 
+          m_Shooter));
+
+      /*Run index */
+      m_driverController
+      .b()
+      .whileTrue(
+        new StartEndCommand(
+          () -> m_Shooter.runIndex(ShooterConstants.INDEX_SPEED), 
+          () -> m_Shooter.runIndex(0), 
+          m_Shooter));   
+
+
+        //  -------------------------- //
   
   /*intake */
     //Extend Intake 
