@@ -57,6 +57,7 @@ public void beamBrokenStopMotor(){
         runIntake(0);
         System.out.println("Note Intaked");
        // SmartDashboard.putBoolean("Note in intake", beamBroken());
+       System.out.println(beamBroken());
     }
 }
 
