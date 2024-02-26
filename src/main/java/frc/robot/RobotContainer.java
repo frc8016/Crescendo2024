@@ -6,15 +6,20 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.commands.BeamBreakIntake;
+import frc.robot.commands.ExtendIntake;
 import frc.robot.commands.LowerClimb;
 import frc.robot.commands.RaiseClimb;
+import frc.robot.commands.RetractIntake;
 import frc.robot.commands.RunIndexToShoot;
+import frc.robot.commands.RunIntakeRollers;
 import frc.robot.commands.RunShooter;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.event.BooleanEvent;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -47,6 +53,10 @@ public class RobotContainer {
   private final LowerClimb m_LowerClimb = new LowerClimb(m_Climb);
   private final RunShooter m_RunShooter = new RunShooter(m_Shooter);
   private final RunIndexToShoot m_RunIndexToShoot = new RunIndexToShoot(m_Shooter);
+  private final ExtendIntake m_ExtendIntake = new ExtendIntake(m_Intake); 
+  private final RetractIntake m_RetractIntake = new RetractIntake(m_Intake);
+  private final RunIntakeRollers m_RunIntakeRollers = new RunIntakeRollers(m_Intake);
+  private final BeamBreakIntake m_BeamBreakIntake = new BeamBreakIntake(m_Intake);
 
   private final  SendableChooser<Command> m_autoChooser = new SendableChooser<>();
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -123,11 +133,26 @@ public class RobotContainer {
       .leftBumper()
       .onTrue(
         new RunCommand(() -> m_Intake.retractIntake(), m_Intake));
-    
+    //intake command thing 
+    m_driverController
+    .y()
+    .onTrue(
+      new ParallelCommandGroup( m_ExtendIntake, 
+      new WaitCommand(2),
+      m_RunIntakeRollers
+      //new WaitUntilCommand(
+      //  new BooleanEvent(, m_BeamBreakIntake.sendData(true))
+      //)
+  
+    ));
     /*climb*/
     m_driverController.x().onTrue(m_RaiseClimb);
     m_driverController.y().onTrue(m_LowerClimb);
+
+     
   }
+  
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

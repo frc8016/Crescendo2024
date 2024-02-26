@@ -1,5 +1,8 @@
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
+
 /*need to figure out the beam break thing 
  * essentially when to call it and cancling it and stuff
  */
@@ -15,7 +18,7 @@ import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
     //pnumatic cylenders 
-    private final DoubleSolenoid m_solenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, IntakeConstants.SOLENOID_LEFT_FWD, IntakeConstants.SOLENOID_LEFT_BKW);
+    private final DoubleSolenoid m_solenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, IntakeConstants.SOLENOID_FWD, IntakeConstants.SOLENOID_BKW);
   
     //neo for the rollers
     private final CANSparkMax m_intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_MOTOR, MotorType.kBrushless);
@@ -41,16 +44,19 @@ public void intakeOff(){
     m_solenoid.set(DoubleSolenoid.Value.kOff);
     
 }
+
+
 public boolean beamBroken(){
-    return !m_IntakeBB1.get() && !m_IntakeBB2.get();
+    return m_IntakeBB1.get();
 }
+
 
 //Beam break stops intake motors 
 public void beamBrokenStopMotor(){
     if(!m_IntakeBB1.get() && m_IntakeBB2.get()){
         runIntake(0);
         System.out.println("Note Intaked");
-        SmartDashboard.putBoolean("Note in intake", beamBroken());
+       // SmartDashboard.putBoolean("Note in intake", beamBroken());
     }
 }
 
@@ -58,4 +64,6 @@ public void beamBrokenStopMotor(){
 public void periodic(){
 
 }
+
 }
+

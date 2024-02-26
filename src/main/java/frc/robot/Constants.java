@@ -22,19 +22,22 @@ public final class Constants {
 
   public static class DriveTrainConstants {
     //drivetrain motor controller id
-    public static final int FRONT_LEFT_ID = 1;
-    public static final int BACK_LEFT_ID = 1;
-    public static final int FRONT_RIGHT_ID = 1;
-    public static final int BACK_RIGHT_ID = 1;
+    public static final int FRONT_LEFT_ID = 6;
+    public static final int BACK_LEFT_ID = 5;
+    public static final int FRONT_RIGHT_ID = 3;
+    public static final int BACK_RIGHT_ID = 4;
+    //encoder PID constants 
+
     //encoder constants 
-    public static final int RIGHT_ENCODER_A = 1;
-    public static final int RIGHT_ENCODER_B = 1;
+    public static final int RIGHT_ENCODER_A = 9;
+    public static final int RIGHT_ENCODER_B = 7;
     public static final boolean RIGHT_ENCODER_REVERSED = false;
-    public static final int LEFT_ENCODER_A = 1;
-    public static final int LEFT_ENCODER_B = 1;
+    public static final int LEFT_ENCODER_A = 5;
+    public static final int LEFT_ENCODER_B = 3;
     public static final boolean LEFT_ENCODER_REVERSED = true;
 
-    public static final double kEncoderDistencePerPulse = 1;
+    public static final double kEncoderDistencePerPulse = 0.479 / 4096.0;
+    ;
 
     //pigion id 
     public static final int PIGION_ID = 0; 
@@ -44,7 +47,7 @@ public final class Constants {
     //motor controller id
     public static final int SHOOTER_LEFT = 1; 
     public static final int SHOOTER_RIGHT = 2;
-    public static final int INDEX_ID = 3; 
+    public static final int INDEX_ID = 7; 
     //speeds
     public static final double SHOOTER_SPEED = .3; 
   
@@ -57,12 +60,13 @@ public final class Constants {
     public static final int BEAM_BREAK_INTAKE_ID1 = 1;
     public static final int BEAM_BREAK_INTAKE_ID2 = 1;
 
-    public static final int INTAKE_MOTOR = 0; 
+    public static final int INTAKE_MOTOR = 8; 
 
-    public static final int SOLENOID_LEFT_FWD = 1;
-    public static final int SOLENOID_LEFT_BKW = 2;
-    public static final int SOLENOID_RIGHT_FWD = 3;
-    public static final int SOLENOiD_RIGHT_BKW = 4;
+    public static final double INTAKE_SPEED = .7;
+
+    public static final int SOLENOID_FWD = 1;
+    public static final int SOLENOID_BKW = 2;
+    
   }
 
   public static class ClimbConstants{
