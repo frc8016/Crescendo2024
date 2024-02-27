@@ -55,9 +55,9 @@ public boolean beamBroken(){
 public void beamBrokenStopMotor(){
     if(!m_IntakeBB1.get() && m_IntakeBB2.get()){
         runIntake(0);
-        System.out.println("Note Intaked");
+      //  System.out.println("Note Intaked");
        // SmartDashboard.putBoolean("Note in intake", beamBroken());
-       System.out.println(beamBroken());
+      // System.out.println(beamBroken());
     }
 }
 

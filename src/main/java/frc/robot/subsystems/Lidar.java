@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+//package frc.robot.subsystems;
 /*
  *******************************************************************************************
  * Copyright (C) 2017 FRC Team 1736 Robot Casserole - www.robotcasserole.org
@@ -18,7 +18,7 @@ package frc.robot.subsystems;
  *   Robot Casserole is always looking for more sponsors, so we'd be very appreciative
  *   if you would consider donating to our club to help further STEM education.
  */
-import java.util.TimerTask;
+/*import java.util.TimerTask;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.I2C.Port;
@@ -37,7 +37,7 @@ import edu.wpi.first.wpilibj.I2C.Port;
  *
  */
 
-public class Lidar { // We don't need any pid system, So I took out the code where LIDAR
+/*public class Lidar { // We don't need any pid system, So I took out the code where LIDAR
                                 // inherits from a PID system
     private I2C i2c;
     private static byte[] distance;
@@ -59,7 +59,7 @@ public class Lidar { // We don't need any pid system, So I took out the code whe
      * 
      * @return distance in cm
      */
-    private static int getDistance() { // private cuz I don't want people interacting directly with the
+    /*private static int getDistance() { // private cuz I don't want people interacting directly with the
                                 // buffer...yah...
         return (int) Integer.toUnsignedLong(distance[0] << 8) + Byte.toUnsignedInt(distance[1]);
     }
@@ -70,7 +70,7 @@ public class Lidar { // We don't need any pid system, So I took out the code whe
      * 
      * @return distance in inches
      */
-    public static double getDistanceMM() { // I made this function better. It used to be part of a PID
+   /*  public static double getDistanceMM() { // I made this function better. It used to be part of a PID
                                     // system. We didn't need a PID system.
         return (double) getDistance(); // inches cuz Merica.
     }
@@ -81,7 +81,7 @@ public class Lidar { // We don't need any pid system, So I took out the code whe
      * Start 10Hz polling of LIDAR sensor, in a background task. Only allow 10 Hz. polling at the
      * moment.
      */
-    public void start() {
+   /* public void start() {
         updater.scheduleAtFixedRate(new LIDARUpdater(), 0, 100);
     }
 
@@ -89,7 +89,7 @@ public class Lidar { // We don't need any pid system, So I took out the code whe
     /**
      * Stop the background sensor-polling task.
      */
-    public void stop() {
+  /*   public void stop() {
         updater.cancel();
         updater = new java.util.Timer();
     }
@@ -98,7 +98,7 @@ public class Lidar { // We don't need any pid system, So I took out the code whe
     /**
      * Read from the sensor and update the internal "distance" variable with the result.
      */
-    private void update() {
+   /*  private void update() {
         i2c.write(LIDAR_CONFIG_REGISTER, 0x04); // Initiate measurement
         Timer.delay(0.04); // Delay for measurement to be taken
         i2c.read(LIDAR_DISTANCE_REGISTER, 2, distance); // Read in measurement
@@ -109,7 +109,7 @@ public class Lidar { // We don't need any pid system, So I took out the code whe
      * Timer task to keep distance updated
      *
      */
-    private class LIDARUpdater extends TimerTask {
+   /*  private class LIDARUpdater extends TimerTask {
         public void run() {
             while (true) {
                 update();
@@ -121,4 +121,4 @@ public class Lidar { // We don't need any pid system, So I took out the code whe
             }
         }
     }
-}
+}*/
