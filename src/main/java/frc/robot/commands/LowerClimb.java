@@ -25,7 +25,10 @@ public class LowerClimb extends Command{
     public void end(boolean interrupted){
         m_Climb.setClimbSpeed(0, 0);
     }
-
+    @Override
+    public boolean isFinished(){
+        return false;
+    }
     
 
 

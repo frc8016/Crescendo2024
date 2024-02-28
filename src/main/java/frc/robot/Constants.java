@@ -15,9 +15,9 @@ package frc.robot;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 1;
-    public static final int kJoystickPort = 1;
+    public static final int kJoystickPort = 2;
     public static final int JOYSTICK_Y_AXIS = 1;
-    public static final int JOYSTIC_X_AXIS = 1;
+    public static final int JOYSTIC_X_AXIS = 0;
   }
 
   public static class DriveTrainConstants {
@@ -49,30 +49,30 @@ public final class Constants {
     public static final int SHOOTER_RIGHT = 2;
     public static final int INDEX_ID = 7; 
     //speeds
-    public static final double SHOOTER_SPEED = .3; 
+    public static final double SHOOTER_SPEED = -.1; 
   
-    public static final double INDEX_SPEED = .3;
+    public static final double INDEX_SPEED = -.1;
     //beambreak id
     public static final int BEAM_BREAK_SHOOTER_ID = 0;
   }
 
   public static class IntakeConstants{
     public static final int BEAM_BREAK_INTAKE_ID1 = 1;
-    public static final int BEAM_BREAK_INTAKE_ID2 = 1;
+    public static final int BEAM_BREAK_INTAKE_ID2 = 4;
 
     public static final int INTAKE_MOTOR = 8; 
 
-    public static final double INTAKE_SPEED = .7;
+    public static final double INTAKE_SPEED = .1;
 
-    public static final int SOLENOID_FWD = 1;
-    public static final int SOLENOID_BKW = 2;
+    public static final int SOLENOID_FWD = 6;
+    public static final int SOLENOID_BKW = 7;
     
   }
 
   public static class ClimbConstants{
     //motor controller id
-    public static final int LEFT = 1;
-    public static final int RIGHT = 1;
+    public static final int LEFT = 10;
+    public static final int RIGHT = 11;
     //speed
     public static final double CLIMB_SPEED = 0;
   }

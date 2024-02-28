@@ -1,15 +1,17 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+//import edu.wpi.first.math.geometry.Pose2d;
+//import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveTrainConstants;
+
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.ctre.phoenix.sensors.WPI_PigeonIMU;
+//import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
 public class DriveTrain extends SubsystemBase {
     //motor controllers 
@@ -24,10 +26,11 @@ public class DriveTrain extends SubsystemBase {
     private final Encoder m_leftEncoder = new Encoder(DriveTrainConstants.LEFT_ENCODER_A, DriveTrainConstants.LEFT_ENCODER_B);
     private final Encoder m_rightEncoder = new Encoder(DriveTrainConstants.RIGHT_ENCODER_A, DriveTrainConstants.RIGHT_ENCODER_B);
 
+    
     //gyro 
-    private final WPI_PigeonIMU m_gyro = new WPI_PigeonIMU(DriveTrainConstants.PIGION_ID);
+    //private final WPI_PigeonIMU m_gyro = new WPI_PigeonIMU(DriveTrainConstants.PIGION_ID);
     //odometry for checking robot pose/position
-    private final DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(null, null, null); 
+   // private final DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(null, null, null); 
     
 
 // new drive subsystem
@@ -43,34 +46,34 @@ public DriveTrain(){
 
     resetEncoders();
 
-    new DifferentialDriveOdometry( m_gyro.getRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
+    //new DifferentialDriveOdometry( m_gyro.getRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
 }
 
 
 @Override 
 public void periodic(){
     //update odometry 
-    m_odometry.update(
-        m_gyro.getRotation2d(),
-        m_leftEncoder.getDistance(), m_rightEncoder.getDistance() );
-}
+   // m_odometry.update(
+      //  m_gyro.getRotation2d(),
+    //    m_leftEncoder.getDistance(), m_rightEncoder.getDistance() );
+}//
 
 //returns estimated pose of robot
-public Pose2d getPose(){
-    return m_odometry.getPoseMeters();
-}
+//public Pose2d getPose(){
+  //  return m_odometry.getPoseMeters();
+//}
 
 //return current wheel speed
 public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(m_leftEncoder.getRate(), m_rightEncoder.getRate());
 }
     
-//reste odometry to the specified pose 
+/*//reste odometry to the specified pose 
 public void resetOdometry(Pose2d pose) {
-    resetEncoders();
+    resetEncoders();*/
     
-    m_odometry.resetPosition(m_gyro.getRotation2d(), m_leftEncoder.getDistance(),m_rightEncoder.getDistance(), pose);
-}
+   // m_odometry.resetPosition(m_gyro.getRotation2d(), m_leftEncoder.getDistance(),m_rightEncoder.getDistance(), pose);
+//}
 
 //arcade drive (actually drives the robot!)
 public void arcadeDrive(double speed, double rotation) {
@@ -78,11 +81,11 @@ public void arcadeDrive(double speed, double rotation) {
 }
 
 //control left and right side directly with voltage 
-public void tankDriveVolts(double leftVolts, double rightVolts) {
+/*public void tankDriveVolts(double leftVolts, double rightVolts) {
     m_frontLeft.setVoltage(leftVolts);
     m_backLeft.setVoltage(rightVolts);
-    m_drive.feed();
-}
+    m_drive.feed();*/
+
 
 //reset encoders 
 public void resetEncoders(){
@@ -108,19 +111,21 @@ public Encoder getRightEncoder(){
 //set max outputes of the drive 
 public void setMaxOutput(double maxOutput) {
     m_drive.setMaxOutput(maxOutput); 
-}
-
+}}
+/* 
 //zero heading of the robot using gyro
 public void zeroHeading() {
-    m_gyro.reset();
+   // m_gyro.reset();
 }
-
+/* 
 //return heading of the robot
 public double getHeading(){
-    return m_gyro.getRotation2d().getDegrees();
+    return (Double) null;
+    //return m_gyro.getRotation2d().getDegrees();
 }
 //return turn rate of the robot
 public double getTurnRate(){
-    return -m_gyro.getRate();
+    return (Double) null;
+   // return -m_gyro.getRate();
 }
-}
+}*/

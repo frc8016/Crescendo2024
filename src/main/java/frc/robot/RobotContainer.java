@@ -16,6 +16,7 @@ import frc.robot.commands.RunIntakeRollers;
 import frc.robot.commands.RunShooter;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Index;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj.Joystick;
@@ -23,9 +24,11 @@ import edu.wpi.first.wpilibj.event.BooleanEvent;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -48,11 +51,12 @@ public class RobotContainer {
   private final Shooter m_Shooter = new Shooter();
   private final Climb m_Climb = new Climb();
   private final Intake m_Intake = new Intake();
+  private final Index m_Index = new Index();
 //commands 
   private final RaiseClimb m_RaiseClimb = new RaiseClimb(m_Climb);
   private final LowerClimb m_LowerClimb = new LowerClimb(m_Climb);
   private final RunShooter m_RunShooter = new RunShooter(m_Shooter);
-  private final RunIndexToShoot m_RunIndexToShoot = new RunIndexToShoot(m_Shooter);
+  private final RunIndexToShoot m_RunIndexToShoot = new RunIndexToShoot(m_Index);
   private final ExtendIntake m_ExtendIntake = new ExtendIntake(m_Intake); 
   private final RetractIntake m_RetractIntake = new RetractIntake(m_Intake);
   private final RunIntakeRollers m_RunIntakeRollers = new RunIntakeRollers(m_Intake);
@@ -90,61 +94,41 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-   /*shooter */
-  m_driverController
+   //shooter (need to check whats wrong with this) :)
+   m_driverController
   .x()
   .whileTrue(
     new ParallelCommandGroup(
-      m_RunShooter, 
+      m_RunShooter,
       new WaitCommand(2),
       m_RunIndexToShoot
       ));
 
       //for testings 
       /*Run shooter */
-      m_driverController
-      .a()
-      .whileTrue(
-        new StartEndCommand(
-          () -> m_Shooter.runShooter(ShooterConstants.SHOOTER_SPEED), 
-          () -> m_Shooter.runShooter(0), 
-          m_Shooter));
-
+      m_driverController.a().whileTrue(m_RunIndexToShoot);
       /*Run index */
-      m_driverController
-      .b()
-      .whileTrue(
-        new StartEndCommand(
-          () -> m_Shooter.runIndex(ShooterConstants.INDEX_SPEED), 
-          () -> m_Shooter.runIndex(0), 
-          m_Shooter));   
+      m_driverController.b().whileTrue(m_RunShooter);   
 
 
         //  -------------------------- //
   
   /*intake */
     //Extend Intake 
-    m_driverController
-    .rightBumper()
-    .onTrue(
-      new RunCommand(() -> m_Intake.extendIntake(), m_Intake));
+    m_driverController.rightBumper().onTrue(m_ExtendIntake);
     //Retract intake
-      m_driverController
-      .leftBumper()
-      .onTrue(
-        new RunCommand(() -> m_Intake.retractIntake(), m_Intake));
+      m_driverController.leftBumper().onTrue(m_RetractIntake);
+    //run intake rollers
+    m_driverController.y().toggleOnTrue(m_RunIntakeRollers);
     //intake command thing 
-    m_driverController
-    .y()
-    .onTrue(
-      new ParallelCommandGroup( m_ExtendIntake, 
-      new WaitCommand(2),
-      m_RunIntakeRollers
-      //new WaitUntilCommand(
-      //  new BooleanEvent(, m_BeamBreakIntake.sendData(true))
-      //)
-  
-    ));
+    m_driverController.leftTrigger().onTrue(
+      new ParallelCommandGroup(
+        m_ExtendIntake
+       // m_RunIntakeRollers.until(m_BeamBreak.get(true))
+      )
+    );
+
+ 
     /*climb*/
     m_driverController.x().onTrue(m_RaiseClimb);
     m_driverController.y().onTrue(m_LowerClimb);

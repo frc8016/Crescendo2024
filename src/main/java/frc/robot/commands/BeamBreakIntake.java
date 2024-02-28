@@ -14,6 +14,7 @@ public class BeamBreakIntake extends Command {
     }
 @Override
 public void initialize(){}
+
 @Override
 public void execute(){
 if (m_Intake.beamBroken() == true){
@@ -26,7 +27,7 @@ if (m_Intake.beamBroken() == true){
 public void  end(boolean interrupted){
    
 }
-public boolean sendData(boolean b) {
+public boolean sendData(boolean b){
    return m_Intake.beamBroken();
 }
 }

@@ -15,7 +15,7 @@ public class Shooter extends SubsystemBase{
     private final static CANSparkMax m_shooterLeft = new CANSparkMax(ShooterConstants.SHOOTER_LEFT, MotorType.kBrushless);
     private final static CANSparkMax m_ShooterRight = new CANSparkMax(ShooterConstants.SHOOTER_RIGHT, MotorType.kBrushless);
     //index motor 
-    private final CANSparkMax m_index = new CANSparkMax(ShooterConstants.INDEX_ID, MotorType.kBrushless);
+
     //beam break
     private final DigitalInput m_shooterBB = new DigitalInput(ShooterConstants.BEAM_BREAK_SHOOTER_ID);
     //runs the shooter
@@ -24,9 +24,8 @@ public class Shooter extends SubsystemBase{
         m_ShooterRight.set(-speed);
     }
     //run the index
-    public void runIndex(double speed){
-        m_index.set(speed);
-    }
+    
+    
     //beam break stuff 
     public boolean shooterBeamBroken(){
         return !m_shooterBB.get();

@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Index;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -17,13 +18,13 @@ public final class Autos {
     return Commands.sequence(subsystem.exampleMethodCommand(), new ExampleCommand(subsystem));
   }
  
-  public static Command scoreSpeakerAuto(Shooter shooter){
+  public static Command scoreSpeakerAuto(Shooter shooter, Index index){
    return Commands.sequence(
     Commands.runOnce( 
       () -> shooter.runShooter(1), shooter
     ),
     new WaitCommand(2),
-    Commands.runOnce(() -> shooter.runIndex(1), shooter),
+    Commands.runOnce(() -> index.runIndex(1), index),
     new WaitCommand(3)
    );
   }
