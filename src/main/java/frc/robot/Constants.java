@@ -71,8 +71,8 @@ public final class Constants {
 
   public static class ClimbConstants{
     //motor controller id
-    public static final int LEFT = 10;
-    public static final int RIGHT = 11;
+    public static final int LEFT = 900;
+    public static final int RIGHT = 90;
     //speed
     public static final double CLIMB_SPEED = 0;
   }

@@ -4,21 +4,25 @@
 
 package frc.robot;
 
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.BeamBreakIntake;
 import frc.robot.commands.ExtendIntake;
-import frc.robot.commands.LowerClimb;
-import frc.robot.commands.RaiseClimb;
+//import frc.robot.commands.LowerClimb;
+//import frc.robot.commands.RaiseClimb;
 import frc.robot.commands.RetractIntake;
 import frc.robot.commands.RunIndexToShoot;
 import frc.robot.commands.RunIntakeRollers;
 import frc.robot.commands.RunShooter;
-import frc.robot.subsystems.Climb;
+//import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Index;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+
+import com.fasterxml.jackson.databind.node.ShortNode;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.event.BooleanEvent;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -49,12 +53,12 @@ public class RobotContainer {
 //subsystems 
   private final DriveTrain m_DriveTrain = new DriveTrain();
   private final Shooter m_Shooter = new Shooter();
-  private final Climb m_Climb = new Climb();
+ // private final Climb m_Climb = new Climb();
   private final Intake m_Intake = new Intake();
   private final Index m_Index = new Index();
 //commands 
-  private final RaiseClimb m_RaiseClimb = new RaiseClimb(m_Climb);
-  private final LowerClimb m_LowerClimb = new LowerClimb(m_Climb);
+ // private final RaiseClimb m_RaiseClimb = new RaiseClimb(m_Climb);
+//  private final LowerClimb m_LowerClimb = new LowerClimb(m_Climb);
   private final RunShooter m_RunShooter = new RunShooter(m_Shooter);
   private final RunIndexToShoot m_RunIndexToShoot = new RunIndexToShoot(m_Index);
   private final ExtendIntake m_ExtendIntake = new ExtendIntake(m_Intake); 
@@ -97,41 +101,51 @@ public class RobotContainer {
    //shooter (need to check whats wrong with this) :)
    m_driverController
   .x()
-  .whileTrue(
+  .toggleOnTrue(
     new ParallelCommandGroup(
-      m_RunShooter,
+      new RunCommand(() -> m_Shooter.runShooter(ShooterConstants.SHOOTER_SPEED), m_Shooter),
       new WaitCommand(2),
-      m_RunIndexToShoot
+      new RunCommand(() -> m_Index.runIndex(ShooterConstants.INDEX_SPEED), m_Index)
       ));
 
       //for testings 
       /*Run shooter */
-      m_driverController.a().whileTrue(m_RunIndexToShoot);
+      m_driverController.a().whileTrue(
+       new StartEndCommand(
+        () -> m_Shooter.runShooter(ShooterConstants.SHOOTER_SPEED),
+        () -> m_Shooter.runShooter(0),
+        m_Shooter
+       ));
       /*Run index */
-      m_driverController.b().whileTrue(m_RunShooter);   
+      m_driverController.b().whileTrue(
+        new StartEndCommand(
+          () -> m_Index.runIndex(ShooterConstants.INDEX_SPEED), 
+          () -> m_Index.runIndex(0), m_Index));   
 
 
         //  -------------------------- //
   
   /*intake */
     //Extend Intake 
-    m_driverController.rightBumper().onTrue(m_ExtendIntake);
+    m_driverController.rightBumper().onTrue(
+      new RunCommand(() -> m_Intake.extendIntake(), m_Intake));
     //Retract intake
-      m_driverController.leftBumper().onTrue(m_RetractIntake);
+      m_driverController.leftBumper().onTrue(
+        new RunCommand(() -> m_Intake.retractIntake(), m_Intake));
     //run intake rollers
-    m_driverController.y().toggleOnTrue(m_RunIntakeRollers);
+    m_driverController.y().toggleOnTrue(
+      new StartEndCommand(
+        () -> m_Intake.runIntake(IntakeConstants.INTAKE_SPEED),
+        () -> m_Intake.runIntake(0),
+        m_Intake));
     //intake command thing 
-    m_driverController.leftTrigger().onTrue(
-      new ParallelCommandGroup(
-        m_ExtendIntake
-       // m_RunIntakeRollers.until(m_BeamBreak.get(true))
-      )
-    );
+   
 
  
     /*climb*/
-    m_driverController.x().onTrue(m_RaiseClimb);
-    m_driverController.y().onTrue(m_LowerClimb);
+
+    //m_driverController.x().whileTrue();
+   // m_driverController.y().whileFalse(m_LowerClimb);
 
      
   }

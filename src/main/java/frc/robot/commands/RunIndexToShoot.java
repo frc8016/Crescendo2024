@@ -15,7 +15,7 @@ public class RunIndexToShoot extends Command{
 }
 @Override 
 public void initialize(){
-   
+   m_Index.init();
 }
 
 @Override

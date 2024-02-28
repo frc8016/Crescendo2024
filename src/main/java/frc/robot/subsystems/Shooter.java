@@ -18,10 +18,11 @@ public class Shooter extends SubsystemBase{
 
     //beam break
     private final DigitalInput m_shooterBB = new DigitalInput(ShooterConstants.BEAM_BREAK_SHOOTER_ID);
+
     //runs the shooter
     public void runShooter(double speed){
         m_shooterLeft.set(speed);
-        m_ShooterRight.set(-speed);
+        m_ShooterRight.set(speed);
     }
     //run the index
     
@@ -31,8 +32,8 @@ public class Shooter extends SubsystemBase{
         return !m_shooterBB.get();
     }
     public void shooterBeamBrokenTrue(){
-        if(!m_shooterBB.get()){
-            System.out.println("note in shooter");
+        if(m_shooterBB.get()){
+           // System.out.println("shoo");
         }
     }
   
@@ -48,4 +49,5 @@ public class Shooter extends SubsystemBase{
       // getLidarDistance();
     }
 
-}
+
+    }

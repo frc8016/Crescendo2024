@@ -1,8 +1,8 @@
-package frc.robot.subsystems;
+/*package frc.robot.subsystems;
 
 /*climb shoudl be done 
  * 2 commands, one raises, one lowers, they should lock 
- */
+ 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -39,3 +39,4 @@ public void periodic(){
     setIdleMode(); 
 }
 }
+*/
