@@ -4,13 +4,10 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 //import edu.wpi.first.math.geometry.Pose2d;
 //import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveTrainConstants;
 
-import com.ctre.phoenix.sensors.WPI_PigeonIMU;
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.revrobotics.CANSparkMax;
@@ -26,10 +23,8 @@ public class DriveTrain extends SubsystemBase {
     //motor controller groups
     private final DifferentialDrive m_drive = new DifferentialDrive(m_frontLeft, m_frontRight);
     //Encoders
-  
-    //private final CANcoder m_leftEncoder = new CANcoder(DriveTrainConstants.LEFT_ENCODER_ID);
-   // private final CANcoder m_rightEncoder = new CANcoder(DriveTrainConstants.RIGHT_ENCODER_ID);
-
+    private final CANcoder m_leftEncoder = new CANcoder(0);
+    private final CANcoder m_rightEncoder = new CANcoder(0);
 
     
     //gyro 
@@ -47,7 +42,8 @@ public DriveTrain(){
     m_frontRight.setInverted(false);
     //set encoders distance per pulse 
     
-    resetEncoders();
+
+ 
 
    //new DifferentialDriveOdometry( m_Pigeon.getRotation2d(), m_leftEncoder.getPosition(), m_rightEncoder.getPosition());
 }
@@ -58,7 +54,7 @@ public void periodic(){
     //update odometry 
    // m_odometry.update(
       //  m_gyro.getRotation2d(),
-    //    m_leftEncoder.getDistance(), m_rightEncoder.getDistance() );
+    //   m_leftEncoder.getDistance(), m_rightEncoder.getDistance() );
 }//
 
 //returns estimated pose of robot
@@ -67,7 +63,9 @@ public void periodic(){
 //}
 
 //return current wheel speed
-//public DifferentialDriveWheelSpeeds getWheelSpeeds() {}
+public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return null;
+}
     
 /*//reste odometry to the specified pose 
 public void resetOdometry(Pose2d pose) {
@@ -89,24 +87,19 @@ public void arcadeDrive(double speed, double rotation) {
 
 
 //reset encoders 
-public void resetEncoders(){
-  //  m_leftEncoder.reset();
-   // m_rightEncoder.reset();
-}
+
 
 //get averge distance of two encoders
-//public double getAverageEncoderDistance(){}
-   // return (m_leftEncoder.getDistance() + m_rightEncoder.getDistance() / 2.0);
-
 
 //get the left encoder 
-//public Encoder getLeftEncoder(){}
-   // return m_leftEncoder;
+public CANcoder getLeftEncoder(){
+    return m_leftEncoder;
+}
 
 //get right encoder
-//public Encoder getRightEncoder(){}
-   // return m_rightEncoder;
-//}
+public CANcoder getRightEncoder(){
+    return m_rightEncoder;
+}
 
 //set max outputes of the drive 
 public void setMaxOutput(double maxOutput) {

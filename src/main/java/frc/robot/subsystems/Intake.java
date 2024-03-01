@@ -1,21 +1,9 @@
 package frc.robot.subsystems;
 
 import java.util.function.BooleanSupplier;
-
-
-/*need to figure out the beam break thing 
- * essentially when to call it and cancling it and stuff
- */
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.event.BooleanEvent;
-import edu.wpi.first.wpilibj.event.EventLoop;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
@@ -26,16 +14,9 @@ public class Intake extends SubsystemBase {
    
     //Beam breaks
     private final DigitalInput m_IntakeBB1 = new DigitalInput(IntakeConstants.BEAM_BREAK_INTAKE_ID1);
-   // private final DigitalInput m_IntakeBB2 = new DigitalInput(IntakeConstants.BEAM_BREAK_INTAKE_ID2);
-
-   // private final AnalogInput intakeInput = new AnalogInput(0);
-   // private final EventLoop m_Loop = new EventLoop();
-    //BooleanEvent checkbb1 = new BooleanEvent(m_loop, m_con)
-
-
+  
         
-    
-//run the rollers to intake note with neo 
+
 
 //extends intake over the bumpers using pnumatics
 public void extendIntake(){
@@ -56,7 +37,6 @@ public void intakeOff(){
 public boolean beamBroken(){
     return m_IntakeBB1.get();
 }
-
 
 public BooleanSupplier m_BooleanSupplier(){
     return (() -> m_IntakeBB1.get() == false);

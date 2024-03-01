@@ -113,9 +113,23 @@ public class RobotContainer {
 
       //for testings 
       /*Run shooter */
+      m_driverController.a().toggleOnTrue(
+       new StartEndCommand(
+        () -> m_Shooter.runShooter(ShooterConstants.SHOOTER_SPEED),
+        () -> m_Shooter.runShooter(0),
+        m_Shooter
+       ));
      
 
       /*Run index */
+      m_driverController.rightTrigger().whileTrue(
+        new StartEndCommand(
+          () -> m_Index.runIndex(ShooterConstants.INDEX_SPEED), 
+          () -> m_Index.runIndex(0), m_Index));   
+
+
+        //  -------------------------- //
+  
      
 
   /*intake */
@@ -149,6 +163,12 @@ public class RobotContainer {
           ;
       
     //intake command thing 
+   /*m_driverController.y().onTrue(
+    new ParallelCommandGroup(
+      m_RunIntakeRollers.until(m_Intake.bb1Event())
+      
+    )
+   );*/
    
      //new RunCommand(() -> m_Intake.retractIntake(), m_Intake)));
 
