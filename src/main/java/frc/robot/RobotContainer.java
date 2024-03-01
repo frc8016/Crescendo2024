@@ -19,6 +19,7 @@ import frc.robot.commands.RunShooter;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Index;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeMotor;
 import frc.robot.subsystems.Shooter;
 
 import com.fasterxml.jackson.databind.node.ShortNode;
@@ -30,6 +31,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -56,6 +58,7 @@ public class RobotContainer {
  // private final Climb m_Climb = new Climb();
   private final Intake m_Intake = new Intake();
   private final Index m_Index = new Index();
+  private final IntakeMotor m_IntakeMotor = new IntakeMotor();
 //commands 
  // private final RaiseClimb m_RaiseClimb = new RaiseClimb(m_Climb);
 //  private final LowerClimb m_LowerClimb = new LowerClimb(m_Climb);
@@ -63,7 +66,6 @@ public class RobotContainer {
   private final RunIndexToShoot m_RunIndexToShoot = new RunIndexToShoot(m_Index);
   private final ExtendIntake m_ExtendIntake = new ExtendIntake(m_Intake); 
   private final RetractIntake m_RetractIntake = new RetractIntake(m_Intake);
-  private final RunIntakeRollers m_RunIntakeRollers = new RunIntakeRollers(m_Intake);
   private final BeamBreakIntake m_BeamBreakIntake = new BeamBreakIntake(m_Intake);
 
   private final  SendableChooser<Command> m_autoChooser = new SendableChooser<>();
@@ -102,46 +104,55 @@ public class RobotContainer {
    m_driverController
   .x()
   .toggleOnTrue(
-    new ParallelCommandGroup(m_RunShooter, new WaitCommand(5), m_RunIndexToShoot));
+    new ParallelCommandGroup(
+      new StartEndCommand(() -> m_Shooter.runShooter(ShooterConstants.SHOOTER_SPEED), () -> m_Shooter.runShooter(0), m_Shooter),
+      new StartEndCommand(() -> m_Index.runIndex(ShooterConstants.INDEX_SPEED), () -> m_Index.runIndex(0), m_Index)
+    ));
 
       //for testings 
       /*Run shooter */
-      m_driverController.a().whileTrue(
+      m_driverController.rightTrigger().whileTrue(
        new StartEndCommand(
         () -> m_Shooter.runShooter(ShooterConstants.SHOOTER_SPEED),
         () -> m_Shooter.runShooter(0),
         m_Shooter
        ));
+
       /*Run index */
-      m_driverController.b().whileTrue(
+      m_driverController.a().whileTrue(
         new StartEndCommand(
           () -> m_Index.runIndex(ShooterConstants.INDEX_SPEED), 
           () -> m_Index.runIndex(0), m_Index));   
 
-
-        //  -------------------------- //
-  
   /*intake */
     //Extend Intake 
-    m_driverController.rightBumper().onTrue(
+    m_driverController.leftBumper().onTrue(
       new RunCommand(() -> m_Intake.extendIntake(), m_Intake));
     //Retract intake
-      m_driverController.leftBumper().onTrue(
+      m_driverController.rightBumper().onTrue(
         new RunCommand(() -> m_Intake.retractIntake(), m_Intake));
     //run intake rollers
-    m_driverController.y().toggleOnTrue(
+    m_driverController.b().toggleOnTrue(
       new StartEndCommand(
-        () -> m_Intake.runIntake(IntakeConstants.INTAKE_SPEED),
-        () -> m_Intake.runIntake(0),
+        () -> m_IntakeMotor.runIntake(IntakeConstants.INTAKE_SPEED),
+        () -> m_IntakeMotor.runIntake(0),
         m_Intake));
     //intake command thing 
-   
+   m_driverController
+   .y()
+   .onTrue(
+    new ParallelRaceGroup(
+      new RunCommand(() -> m_Intake.extendIntake(), m_Intake),
+      new StartEndCommand(
+        () -> m_IntakeMotor.runIntake(IntakeConstants.INTAKE_SPEED),
+        () ->  m_IntakeMotor.runIntake(0), m_IntakeMotor)
+        .until(m_Intake.m_BooleanSupplier())));
+     //new RunCommand(() -> m_Intake.retractIntake(), m_Intake)));
 
  
     /*climb*/
 
-    //m_driverController.x().whileTrue();
-   // m_driverController.y().whileFalse(m_LowerClimb);
+
 
      
   }

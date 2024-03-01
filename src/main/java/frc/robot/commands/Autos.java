@@ -35,7 +35,7 @@ public final class Autos {
   public static Command intakteAuto(Intake intake){
     return Commands.sequence(
     Commands.runOnce(() -> intake.extendIntake(), intake),
-    Commands.runOnce(()-> intake.runIntake(.5), intake),
+    //Commands.runOnce(()-> intake.runIntake(.5), intake),
     new WaitCommand(3),
     Commands.runOnce(() -> intake.retractIntake(), intake));
   }
