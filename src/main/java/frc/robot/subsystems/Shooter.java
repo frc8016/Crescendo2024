@@ -22,7 +22,7 @@ public class Shooter extends SubsystemBase{
     //runs the shooter
     public void runShooter(double speed){
         m_shooterLeft.set(speed);
-        m_ShooterRight.set(speed);
+        m_ShooterRight.set(-speed);
     }
     //run the index
     

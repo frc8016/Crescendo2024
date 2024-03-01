@@ -102,11 +102,7 @@ public class RobotContainer {
    m_driverController
   .x()
   .toggleOnTrue(
-    new ParallelCommandGroup(
-      new RunCommand(() -> m_Shooter.runShooter(ShooterConstants.SHOOTER_SPEED), m_Shooter),
-      new WaitCommand(2),
-      new RunCommand(() -> m_Index.runIndex(ShooterConstants.INDEX_SPEED), m_Index)
-      ));
+    new ParallelCommandGroup(m_RunShooter, new WaitCommand(5), m_RunIndexToShoot));
 
       //for testings 
       /*Run shooter */
