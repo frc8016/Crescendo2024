@@ -48,12 +48,12 @@ public final class Constants {
   
     public static final double INDEX_SPEED = -.1;
     //beambreak id
-    public static final int BEAM_BREAK_SHOOTER_ID = 0;
+    public static final int BEAM_BREAK_SHOOTER_ID = 9;
   }
 
   public static class IntakeConstants{
-    public static final int BEAM_BREAK_INTAKE_ID1 = 1;
-    public static final int BEAM_BREAK_INTAKE_ID2 = 4;
+    public static final int BEAM_BREAK_INTAKE_ID1 = 0;
+ 
 
     public static final int INTAKE_MOTOR = 8; 
 

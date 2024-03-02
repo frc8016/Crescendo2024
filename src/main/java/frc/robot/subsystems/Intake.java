@@ -64,6 +64,7 @@ public BooleanSupplier m_BooleanSupplier(){
 public void periodic(){
     m_BooleanSupplier();
     System.out.println(m_BooleanSupplier());
+    System.out.println("beam break get " + beamBroken());
 }
 
 }
