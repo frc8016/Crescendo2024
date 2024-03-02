@@ -26,10 +26,10 @@ public class Intake extends SubsystemBase {
    
     //Beam breaks
     private final DigitalInput m_IntakeBB1 = new DigitalInput(IntakeConstants.BEAM_BREAK_INTAKE_ID1);
-    private final DigitalInput m_IntakeBB2 = new DigitalInput(IntakeConstants.BEAM_BREAK_INTAKE_ID2);
+   // private final DigitalInput m_IntakeBB2 = new DigitalInput(IntakeConstants.BEAM_BREAK_INTAKE_ID2);
 
     private final AnalogInput intakeInput = new AnalogInput(0);
-    private final EventLoop m_Loop = new EventLoop();
+   // private final EventLoop m_Loop = new EventLoop();
     //BooleanEvent checkbb1 = new BooleanEvent(m_loop, m_con)
 //run the rollers to intake note with neo 
 

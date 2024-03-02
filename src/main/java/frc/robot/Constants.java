@@ -29,18 +29,13 @@ public final class Constants {
     //encoder PID constants 
 
     //encoder constants 
-    public static final int RIGHT_ENCODER_A = 9;
-    public static final int RIGHT_ENCODER_B = 7;
-    public static final boolean RIGHT_ENCODER_REVERSED = false;
-    public static final int LEFT_ENCODER_A = 5;
-    public static final int LEFT_ENCODER_B = 3;
-    public static final boolean LEFT_ENCODER_REVERSED = true;
-
+    public static final int RIGHT_ENCODER_ID = 9;
+    public static final int LEFT_ENCODER_ID = 10;
     public static final double kEncoderDistencePerPulse = 0.479 / 4096.0;
     ;
 
     //pigion id 
-    public static final int PIGION_ID = 0; 
+    public static final int PIGION_ID = 11; 
   }
 
   public static class ShooterConstants{

@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveTrainConstants;
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -23,8 +25,8 @@ public class DriveTrain extends SubsystemBase {
     private final DifferentialDrive m_drive = new DifferentialDrive(m_frontLeft, m_frontRight);
     //Encoders
   
-    private final Encoder m_leftEncoder = new Encoder(DriveTrainConstants.LEFT_ENCODER_A, DriveTrainConstants.LEFT_ENCODER_B);
-    private final Encoder m_rightEncoder = new Encoder(DriveTrainConstants.RIGHT_ENCODER_A, DriveTrainConstants.RIGHT_ENCODER_B);
+    private final CANcoder m_leftEncoder = new CANcoder(DriveTrainConstants.LEFT_ENCODER_ID);
+    private final CANcoder m_rightEncoder = new CANcoder(DriveTrainConstants.RIGHT_ENCODER_ID);
 
     
     //gyro 
@@ -41,9 +43,7 @@ public DriveTrain(){
     m_frontLeft.setInverted(true);
     m_frontRight.setInverted(false);
     //set encoders distance per pulse 
-    m_leftEncoder.setDistancePerPulse(DriveTrainConstants.kEncoderDistencePerPulse);
-    m_rightEncoder.setDistancePerPulse(DriveTrainConstants.kEncoderDistencePerPulse);
-
+    
     resetEncoders();
 
     //new DifferentialDriveOdometry( m_gyro.getRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
@@ -64,9 +64,7 @@ public void periodic(){
 //}
 
 //return current wheel speed
-public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(m_leftEncoder.getRate(), m_rightEncoder.getRate());
-}
+//public DifferentialDriveWheelSpeeds getWheelSpeeds() {}
     
 /*//reste odometry to the specified pose 
 public void resetOdometry(Pose2d pose) {
@@ -89,24 +87,23 @@ public void arcadeDrive(double speed, double rotation) {
 
 //reset encoders 
 public void resetEncoders(){
-    m_leftEncoder.reset();
-    m_rightEncoder.reset();
+  //  m_leftEncoder.reset();
+   // m_rightEncoder.reset();
 }
 
 //get averge distance of two encoders
-public double getAverageEncoderDistance(){
-    return (m_leftEncoder.getDistance() + m_rightEncoder.getDistance() / 2.0);
-}
+//public double getAverageEncoderDistance(){}
+   // return (m_leftEncoder.getDistance() + m_rightEncoder.getDistance() / 2.0);
+
 
 //get the left encoder 
-public Encoder getLeftEncoder(){
-    return m_leftEncoder;
-}
+//public Encoder getLeftEncoder(){}
+   // return m_leftEncoder;
 
 //get right encoder
-public Encoder getRightEncoder(){
-    return m_rightEncoder;
-}
+//public Encoder getRightEncoder(){}
+   // return m_rightEncoder;
+//}
 
 //set max outputes of the drive 
 public void setMaxOutput(double maxOutput) {
