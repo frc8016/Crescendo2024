@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.commands.Autos;
 import frc.robot.commands.BeamBreakIntake;
 import frc.robot.commands.ExtendIntake;
 //import frc.robot.commands.LowerClimb;
@@ -33,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -72,7 +74,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
-    m_autoChooser.setDefaultOption("auto1", null);
+    m_autoChooser.setDefaultOption("auto1", Autos.runShooterAuto(m_Shooter, m_Index));
     m_autoChooser.addOption("auto2", null);
 
     SmartDashboard.putData(m_autoChooser);
@@ -111,18 +113,10 @@ public class RobotContainer {
 
       //for testings 
       /*Run shooter */
-      m_driverController.rightTrigger().whileTrue(
-       new StartEndCommand(
-        () -> m_Shooter.runShooter(ShooterConstants.SHOOTER_SPEED),
-        () -> m_Shooter.runShooter(0),
-        m_Shooter
-       ));
+     
 
       /*Run index */
-      m_driverController.a().whileTrue(
-        new StartEndCommand(
-          () -> m_Index.runIndex(ShooterConstants.INDEX_SPEED), 
-          () -> m_Index.runIndex(0), m_Index));   
+     
 
   /*intake */
     //Extend Intake 
@@ -132,21 +126,30 @@ public class RobotContainer {
       m_driverController.rightBumper().onTrue(
         new RunCommand(() -> m_Intake.retractIntake(), m_Intake));
     //run intake rollers
-    m_driverController.b().toggleOnTrue(
+    m_driverController.b().whileTrue(
       new StartEndCommand(
         () -> m_IntakeMotor.runIntake(IntakeConstants.INTAKE_SPEED),
         () -> m_IntakeMotor.runIntake(0),
         m_Intake));
+
+      m_driverController.a().whileTrue(
+        new StartEndCommand(
+          () -> m_IntakeMotor.runIntake(-IntakeConstants.INTAKE_SPEED), 
+          () -> m_IntakeMotor.runIntake(0), 
+          m_IntakeMotor)
+      );
+      
+      m_driverController.y().whileTrue(
+             new StartEndCommand(
+          () -> m_IntakeMotor.runIntake(IntakeConstants.INTAKE_SPEED),
+          () -> m_IntakeMotor.runIntake(0))
+          .until(m_Intake.m_BooleanSupplier())
+          )
+        //  new RunCommand(() -> m_Intake.retractIntake(), m_Intake))
+          ;
+      
     //intake command thing 
-   m_driverController
-   .y()
-   .onTrue(
-    new ParallelRaceGroup(
-      new RunCommand(() -> m_Intake.extendIntake(), m_Intake),
-      new StartEndCommand(
-        () -> m_IntakeMotor.runIntake(IntakeConstants.INTAKE_SPEED),
-        () ->  m_IntakeMotor.runIntake(0), m_IntakeMotor)
-        .until(m_Intake.m_BooleanSupplier())));
+   
      //new RunCommand(() -> m_Intake.retractIntake(), m_Intake)));
 
  

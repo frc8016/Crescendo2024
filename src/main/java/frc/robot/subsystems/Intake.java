@@ -28,9 +28,13 @@ public class Intake extends SubsystemBase {
     private final DigitalInput m_IntakeBB1 = new DigitalInput(IntakeConstants.BEAM_BREAK_INTAKE_ID1);
    // private final DigitalInput m_IntakeBB2 = new DigitalInput(IntakeConstants.BEAM_BREAK_INTAKE_ID2);
 
-    private final AnalogInput intakeInput = new AnalogInput(0);
+   // private final AnalogInput intakeInput = new AnalogInput(0);
    // private final EventLoop m_Loop = new EventLoop();
     //BooleanEvent checkbb1 = new BooleanEvent(m_loop, m_con)
+
+
+        
+    
 //run the rollers to intake note with neo 
 
 //extends intake over the bumpers using pnumatics
@@ -52,13 +56,15 @@ public void intakeOff(){
 public boolean beamBroken(){
     return m_IntakeBB1.get();
 }
-public int intake(){
-    return intakeInput.getValue();
-}
+
 
 public BooleanSupplier m_BooleanSupplier(){
-    return (() -> beamBroken());
+    return (() -> m_IntakeBB1.get() == false);
 }
+public void getAsBoolean(){
+    m_BooleanSupplier().getAsBoolean();
+}
+
 
 @Override
 public void periodic(){

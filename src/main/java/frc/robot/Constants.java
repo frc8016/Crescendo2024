@@ -44,9 +44,9 @@ public final class Constants {
     public static final int SHOOTER_RIGHT = 2;
     public static final int INDEX_ID = 7; 
     //speeds
-    public static final double SHOOTER_SPEED = -.1; 
+    public static final double SHOOTER_SPEED = -.7; 
   
-    public static final double INDEX_SPEED = -.1;
+    public static final double INDEX_SPEED = -.7;
     //beambreak id
     public static final int BEAM_BREAK_SHOOTER_ID = 9;
   }
@@ -57,7 +57,7 @@ public final class Constants {
 
     public static final int INTAKE_MOTOR = 8; 
 
-    public static final double INTAKE_SPEED = -.1;
+    public static final double INTAKE_SPEED = -.3;
 
     public static final int SOLENOID_FWD = 6;
     public static final int SOLENOID_BKW = 7;
@@ -66,8 +66,8 @@ public final class Constants {
 
   public static class ClimbConstants{
     //motor controller id
-    public static final int LEFT = 900;
-    public static final int RIGHT = 90;
+    public static final int LEFT = 10;
+    public static final int RIGHT = 9;
     //speed
     public static final double CLIMB_SPEED = 0;
   }

@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 //import edu.wpi.first.math.geometry.Pose2d;
 //import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -8,6 +9,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveTrainConstants;
 
+import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
@@ -25,12 +27,13 @@ public class DriveTrain extends SubsystemBase {
     private final DifferentialDrive m_drive = new DifferentialDrive(m_frontLeft, m_frontRight);
     //Encoders
   
-    private final CANcoder m_leftEncoder = new CANcoder(DriveTrainConstants.LEFT_ENCODER_ID);
-    private final CANcoder m_rightEncoder = new CANcoder(DriveTrainConstants.RIGHT_ENCODER_ID);
+    //private final CANcoder m_leftEncoder = new CANcoder(DriveTrainConstants.LEFT_ENCODER_ID);
+   // private final CANcoder m_rightEncoder = new CANcoder(DriveTrainConstants.RIGHT_ENCODER_ID);
+
 
     
     //gyro 
-    //private final WPI_PigeonIMU m_gyro = new WPI_PigeonIMU(DriveTrainConstants.PIGION_ID);
+   // private final WPI_PigeonIMU m_Pigeon = new WPI_PigeonIMU(DriveTrainConstants.PIGION_ID);
     //odometry for checking robot pose/position
    // private final DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(null, null, null); 
     
@@ -46,7 +49,7 @@ public DriveTrain(){
     
     resetEncoders();
 
-    //new DifferentialDriveOdometry( m_gyro.getRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
+   //new DifferentialDriveOdometry( m_Pigeon.getRotation2d(), m_leftEncoder.getPosition(), m_rightEncoder.getPosition());
 }
 
 
