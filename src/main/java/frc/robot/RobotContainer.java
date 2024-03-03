@@ -10,8 +10,7 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.BeamBreakIntake;
 import frc.robot.commands.ExtendIntake;
-//import frc.robot.commands.LowerClimb;
-//import frc.robot.commands.RaiseClimb;
+
 import frc.robot.commands.RetractIntake;
 import frc.robot.commands.RunIndexToShoot;
 import frc.robot.commands.RunIntakeRollers;
@@ -57,25 +56,20 @@ public class RobotContainer {
 //subsystems 
   private final DriveTrain m_DriveTrain = new DriveTrain();
   private final Shooter m_Shooter = new Shooter();
- // private final Climb m_Climb = new Climb();
+ //private final Climb m_Climb = new Climb();
   private final Intake m_Intake = new Intake();
   private final Index m_Index = new Index();
   private final IntakeMotor m_IntakeMotor = new IntakeMotor();
-//commands 
- // private final RaiseClimb m_RaiseClimb = new RaiseClimb(m_Climb);
-//  private final LowerClimb m_LowerClimb = new LowerClimb(m_Climb);
-  private final RunShooter m_RunShooter = new RunShooter(m_Shooter);
-  private final RunIndexToShoot m_RunIndexToShoot = new RunIndexToShoot(m_Index);
-  private final ExtendIntake m_ExtendIntake = new ExtendIntake(m_Intake); 
-  private final RetractIntake m_RetractIntake = new RetractIntake(m_Intake);
-  private final BeamBreakIntake m_BeamBreakIntake = new BeamBreakIntake(m_Intake);
 
   private final  SendableChooser<Command> m_autoChooser = new SendableChooser<>();
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
     m_autoChooser.setDefaultOption("auto1", Autos.runShooterAuto(m_Shooter, m_Index));
-    m_autoChooser.addOption("auto2", null);
+    m_autoChooser.addOption("auto2", Autos.extendIntakeAuto(m_Intake));
+    m_autoChooser.addOption("auto3", Autos.retractIntakeAuto(m_Intake));
+    m_autoChooser.addOption("auto4", Autos.feedIntoShooterAuto(m_IntakeMotor));
+    m_autoChooser.addOption("auto5", Autos.runInakeMotorAuto(m_IntakeMotor, m_Intake));
 
     SmartDashboard.putData(m_autoChooser);
 
@@ -158,27 +152,16 @@ public class RobotContainer {
           () -> m_IntakeMotor.runIntake(IntakeConstants.INTAKE_SPEED),
           () -> m_IntakeMotor.runIntake(0))
           .until(m_Intake.m_BooleanSupplier())
-          )
+          );}
         //  new RunCommand(() -> m_Intake.retractIntake(), m_Intake))
-          ;
-      
-    //intake command thing 
-   /*m_driverController.y().onTrue(
-    new ParallelCommandGroup(
-      m_RunIntakeRollers.until(m_Intake.bb1Event())
-      
-    )
-   );*/
-   
-     //new RunCommand(() -> m_Intake.retractIntake(), m_Intake)));
+    /*climb
+  m_driverController.povUp().whileTrue(
+    new RunCommand(() -> m_Climb.raiseClimb(.2), m_Climb));
 
- 
-    /*climb*/
+  m_driverController.povDown().whileTrue(
+    new RunCommand(() -> m_Climb.lowerClimb(.2), m_Climb));
 
-
-
-     
-  }
+  }*/
   
 
   /**

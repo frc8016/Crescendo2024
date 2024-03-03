@@ -23,8 +23,8 @@ public class DriveTrain extends SubsystemBase {
     //motor controller groups
     private final DifferentialDrive m_drive = new DifferentialDrive(m_frontLeft, m_frontRight);
     //Encoders
-    private final CANcoder m_leftEncoder = new CANcoder(0);
-    private final CANcoder m_rightEncoder = new CANcoder(0);
+    private final CANcoder m_leftEncoder = new CANcoder(10);
+    private final CANcoder m_rightEncoder = new CANcoder(9);
 
     
     //gyro 

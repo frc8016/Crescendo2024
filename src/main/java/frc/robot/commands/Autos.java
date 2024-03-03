@@ -20,15 +20,27 @@ public final class Autos {
   public static Command exampleAuto(ExampleSubsystem subsystem) {
     return Commands.sequence(subsystem.exampleMethodCommand(), new ExampleCommand(subsystem));
   }
+  public static Command autoGroup(Shooter shooter, Index index, Intake intake, IntakeMotor intakeMotor){
+    return
+    Commands.sequence(
+      Commands.parallel(
+        Commands.runOnce(
+        () -> shooter.runShooter(ShooterConstants.SHOOTER_SPEED), shooter),
+        Commands.runOnce(
+          () -> index.runIndex(ShooterConstants.INDEX_SPEED), index)),
+      Commands.runOnce(
+        () -> intake.extendIntake(), intake),
+      Commands.runOnce(
+        () -> intakeMotor.runIntake(IntakeConstants.INTAKE_MOTOR), intakeMotor).until(intake.m_BooleanSupplier()));
+      
+  }
  /*runs the shooter and index at the same time :) */
   public static Command runShooterAuto(Shooter shooter, Index index){
    return 
     Commands.parallel(
       Commands.runOnce( 
-      () -> shooter.runShooter(ShooterConstants.SHOOTER_SPEED), shooter
-    ),
-    Commands.runOnce(() -> index.runIndex(ShooterConstants.INDEX_SPEED), index)
-    );
+      () -> shooter.runShooter(ShooterConstants.SHOOTER_SPEED), shooter),
+    Commands.runOnce(() -> index.runIndex(ShooterConstants.INDEX_SPEED), index));
   }
   /*runs the intake motor to feed the note into the shooter */
   public static Command feedIntoShooterAuto(IntakeMotor intakeMotor){

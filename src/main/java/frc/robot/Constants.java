@@ -60,8 +60,8 @@ public final class Constants {
 
     public static final double INTAKE_SPEED = -.5;
 
-    public static final int SOLENOID_FWD = 6;
-    public static final int SOLENOID_BKW = 7;
+    public static final int SOLENOID_FWD = 7;
+    public static final int SOLENOID_BKW = 6;
     
   }
 
