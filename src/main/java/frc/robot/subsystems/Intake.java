@@ -11,25 +11,22 @@ import frc.robot.Constants.IntakeConstants;
 public class Intake extends SubsystemBase {
     //pnumatic cylenders 
     private final DoubleSolenoid m_solenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, IntakeConstants.SOLENOID_FWD, IntakeConstants.SOLENOID_BKW);
-  
-   
     //Beam breaks
     private final DigitalInput m_IntakeBB1 = new DigitalInput(IntakeConstants.BEAM_BREAK_INTAKE_ID1);
   
     //extends intake over the bumpers using pnumatics
     public void extendIntake(){
         m_solenoid.set(DoubleSolenoid.Value.kForward);
-    
     }
+
     //retract intake into starting position using pnumatics
     public void retractIntake(){
         m_solenoid.set(DoubleSolenoid.Value.kReverse);
-    
     }
+
     //turns off the intake pnumatics
     public void intakeOff(){
-        m_solenoid.set(DoubleSolenoid.Value.kOff);
-        
+        m_solenoid.set(DoubleSolenoid.Value.kOff);  
     }
 
     public boolean beamBroken(){
@@ -53,6 +50,5 @@ public class Intake extends SubsystemBase {
 
         SmartDashboard.putBoolean("Note in intake", !beamBroken());
     }
-
     }
 

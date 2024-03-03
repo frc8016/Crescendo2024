@@ -8,36 +8,18 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.Autos;
-import frc.robot.commands.BeamBreakIntake;
-import frc.robot.commands.ExtendIntake;
-
-import frc.robot.commands.RetractIntake;
-import frc.robot.commands.RunIndexToShoot;
-import frc.robot.commands.RunIntakeRollers;
-import frc.robot.commands.RunShooter;
-//import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Index;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.IntakeMotor;
 import frc.robot.subsystems.Shooter;
-
-import com.fasterxml.jackson.databind.node.ShortNode;
-
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.event.BooleanEvent;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -62,6 +44,9 @@ public class RobotContainer {
   private final IntakeMotor m_IntakeMotor = new IntakeMotor();
 
   private final  SendableChooser<Command> m_autoChooser = new SendableChooser<>();
+
+
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
@@ -73,8 +58,6 @@ public class RobotContainer {
 
     SmartDashboard.putData(m_autoChooser);
 
-
-
     // Configure the trigger bindings
     configureBindings();
     //run the drivetrain 
@@ -85,6 +68,8 @@ public class RobotContainer {
           m_Joystick.getRawAxis(OperatorConstants.JOYSTIC_X_AXIS)),
        m_DriveTrain));
   }
+
+
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -114,17 +99,11 @@ public class RobotContainer {
         m_Shooter
        ));
      
-
       /*Run index */
       m_driverController.rightTrigger().whileTrue(
         new StartEndCommand(
           () -> m_Index.runIndex(ShooterConstants.INDEX_SPEED), 
           () -> m_Index.runIndex(0), m_Index));   
-
-
-        //  -------------------------- //
-  
-     
 
   /*intake */
     //Extend Intake 
@@ -153,15 +132,7 @@ public class RobotContainer {
           () -> m_IntakeMotor.runIntake(0))
           .until(m_Intake.m_BooleanSupplier())
           );}
-        //  new RunCommand(() -> m_Intake.retractIntake(), m_Intake))
-    /*climb
-  m_driverController.povUp().whileTrue(
-    new RunCommand(() -> m_Climb.raiseClimb(.2), m_Climb));
-
-  m_driverController.povDown().whileTrue(
-    new RunCommand(() -> m_Climb.lowerClimb(.2), m_Climb));
-
-  }*/
+       
   
 
   /**

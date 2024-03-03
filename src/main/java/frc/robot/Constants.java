@@ -26,14 +26,10 @@ public final class Constants {
     public static final int BACK_LEFT_ID = 5;
     public static final int FRONT_RIGHT_ID = 3;
     public static final int BACK_RIGHT_ID = 4;
-    //encoder PID constants 
-
     //encoder constants 
     public static final int RIGHT_ENCODER_ID = 9;
     public static final int LEFT_ENCODER_ID = 10;
     public static final double kEncoderDistencePerPulse = 0.479 / 4096.0;
-    ;
-
     //pigion id 
     public static final int PIGION_ID = 11; 
   }
@@ -54,15 +50,13 @@ public final class Constants {
 
   public static class IntakeConstants{
     public static final int BEAM_BREAK_INTAKE_ID1 = 0;
-    public static final int BEAM_BREAK_INTAKE_ID2 = 4;
-
+    //intake motor id
     public static final int INTAKE_MOTOR = 8; 
-
+    //intake motor spped
     public static final double INTAKE_SPEED = -.5;
-
+    //pnumatics
     public static final int SOLENOID_FWD = 7;
     public static final int SOLENOID_BKW = 6;
-    
   }
 
   public static class ClimbConstants{

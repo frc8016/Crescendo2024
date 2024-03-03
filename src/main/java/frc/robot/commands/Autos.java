@@ -13,13 +13,14 @@ import frc.robot.subsystems.IntakeMotor;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public final class Autos {
   /** Example static factory for an autonomous command. */
   public static Command exampleAuto(ExampleSubsystem subsystem) {
     return Commands.sequence(subsystem.exampleMethodCommand(), new ExampleCommand(subsystem));
   }
+
+
   public static Command autoGroup(Shooter shooter, Index index, Intake intake, IntakeMotor intakeMotor){
     return
     Commands.sequence(
@@ -31,9 +32,10 @@ public final class Autos {
       Commands.runOnce(
         () -> intake.extendIntake(), intake),
       Commands.runOnce(
-        () -> intakeMotor.runIntake(IntakeConstants.INTAKE_MOTOR), intakeMotor).until(intake.m_BooleanSupplier()));
-      
+        () -> intakeMotor.runIntake(IntakeConstants.INTAKE_MOTOR), intakeMotor).until(intake.m_BooleanSupplier()));   
   }
+
+
  /*runs the shooter and index at the same time :) */
   public static Command runShooterAuto(Shooter shooter, Index index){
    return 
@@ -42,6 +44,8 @@ public final class Autos {
       () -> shooter.runShooter(ShooterConstants.SHOOTER_SPEED), shooter),
     Commands.runOnce(() -> index.runIndex(ShooterConstants.INDEX_SPEED), index));
   }
+
+
   /*runs the intake motor to feed the note into the shooter */
   public static Command feedIntoShooterAuto(IntakeMotor intakeMotor){
     return 
@@ -49,6 +53,8 @@ public final class Autos {
       Commands.runOnce(
       () -> intakeMotor.runIntake(IntakeConstants.INTAKE_SPEED), intakeMotor));
   }
+
+
 
   public static Command taxiToNote(){
     return null;
@@ -58,17 +64,23 @@ public final class Autos {
     return Commands.sequence(
     Commands.runOnce(() -> intake.extendIntake(), intake));
   }
+
+
   /*runs the intake motor to pick up the note */
   public static Command runInakeMotorAuto(IntakeMotor intakeMotor, Intake intake){
     return Commands.sequence(
       Commands.runOnce(() -> intakeMotor.runIntake(IntakeConstants.INTAKE_SPEED), intakeMotor).until(intake.m_BooleanSupplier()
     ));
   }
+
+
 /*retracts the intake  */
   public static Command retractIntakeAuto(Intake intake){
     return Commands. sequence(
       Commands.runOnce(() -> intake.retractIntake(), intake));
   }
+
+  
 
   public static Command driveToShoot(){
     return null;
