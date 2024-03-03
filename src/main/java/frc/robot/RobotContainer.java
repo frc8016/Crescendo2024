@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
+import frc.robot.subsystems.Auto;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -91,10 +91,16 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
+  
+   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
-
+    Command autoCommand = Autos.exampleAuto(m_exampleSubsystem); // Existing autonomous command
     
+    // Incorporate code from another subsystem (OtherSubsystem)
+    Auto Auto = new Auto();
+    autoCommand.andThen(() -> Auto.new autonomous());
+    
+    return autoCommand;
+
   }
 }
