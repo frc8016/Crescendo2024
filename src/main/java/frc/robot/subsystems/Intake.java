@@ -32,6 +32,9 @@ public class Intake extends SubsystemBase {
     public boolean beamBroken(){
         return m_IntakeBB1.get();
     }
+    public BooleanSupplier m_BooleanSupplierNot(){
+            return (() -> m_IntakeBB1.get() == true);
+    }
 
     public BooleanSupplier m_BooleanSupplier(){
         return (() -> m_IntakeBB1.get() == false);

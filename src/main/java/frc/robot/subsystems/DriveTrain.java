@@ -1,12 +1,28 @@
 package frc.robot.subsystems;
 
+
+
+import static edu.wpi.first.units.MutableMeasure.mutable;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Volts;
+
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.DriveTrainConstants;
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-//import com.ctre.phoenix.sensors.WPI_PigeonIMU;
+import com.ctre.phoenix.sensors.PigeonIMU;
+import com.ctre.phoenix6.hardware.CANcoder;
 
 public class DriveTrain extends SubsystemBase {
     //motor controllers 
@@ -19,6 +35,45 @@ public class DriveTrain extends SubsystemBase {
     //Encoders
     private final CANcoder m_leftEncoder = new CANcoder(10);
     private final CANcoder m_rightEncoder = new CANcoder(9);
+    //pigeon
+    private final PigeonIMU m_pigeon = new PigeonIMU(11);
+
+    //private final DifferentialDriveOdometry m_Odometry = new DifferentialDriveOdometry(null, null, null);
+/*sysID stuff 
+(my favorite)*/
+    private final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
+    private final MutableMeasure<Distance> m_distance = mutable(Meters.of(0));
+    private final MutableMeasure<Velocity<Distance>> m_velocity = mutable(MetersPerSecond.of(0));
+
+    private final SysIdRoutine m_SysIdRoutine= 
+        new SysIdRoutine(
+            new SysIdRoutine.Config(), 
+            new SysIdRoutine.Mechanism(
+                (Measure<Voltage> volts) -> {
+                    m_frontLeft.setVoltage(volts.in(Volts));
+                    m_frontRight.setVoltage(volts.in(Volts));
+                }, 
+                log -> {
+                    log.motor("left drive")
+                    .voltage(
+                        m_appliedVoltage.mut_replace(
+                            m_frontLeft.get() * RobotController.getBatteryVoltage(), Volts))
+                            .linearPosition(m_distance.mut_replace(
+                                (m_leftEncoder).getPositionSinceBoot().getValue(), Meters))
+                            .linearVelocity(m_velocity.mut_replace(
+                                m_leftEncoder.getVelocity().getValue(), MetersPerSecond));
+                    log.motor("right drive")
+                    .voltage(
+                        m_appliedVoltage.mut_replace(
+                            m_frontRight.get() * RobotController.getBatteryVoltage(), Volts))
+                        .linearPosition(m_distance.mut_replace(
+                            m_rightEncoder.getPositionSinceBoot().getValue(), Meters))
+                        .linearVelocity(
+                            m_velocity.mut_replace(
+                                m_rightEncoder.getVelocity().getValue(), MetersPerSecond));
+                },
+                this));
+
 // new drive subsystem
 public DriveTrain(){
     m_backLeft.follow(m_frontLeft);
@@ -27,23 +82,24 @@ public DriveTrain(){
     m_frontLeft.setInverted(true);
     m_frontRight.setInverted(false);
 }
+/*encoder and pigeon things */
+
 
 //arcade drive (actually drives the robot!)
 public void arcadeDrive(double speed, double rotation) {
     m_drive.arcadeDrive(-speed, -rotation);
 }
-
-//get the left encoder 
-public CANcoder getLeftEncoder(){
-    return m_leftEncoder;
+/*more sysID stuff 
+ * yaaaaaaay
+ */
+public Command sysIdQuasistatic(SysIdRoutine.Direction direction){
+    return m_SysIdRoutine.quasistatic(direction);
 }
 
-//get right encoder
-public CANcoder getRightEncoder(){
-    return m_rightEncoder;
+public Command sysIdDynamic(SysIdRoutine.Direction direction){
+    return m_SysIdRoutine.dynamic(direction);
 }
 
-//set max outputes of the drive 
-public void setMaxOutput(double maxOutput) {
-    m_drive.setMaxOutput(maxOutput); 
-}}
+
+
+}

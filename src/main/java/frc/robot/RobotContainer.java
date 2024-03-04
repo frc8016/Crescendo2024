@@ -19,9 +19,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 
 /**
@@ -90,21 +92,6 @@ public class RobotContainer {
       new StartEndCommand(() -> m_Index.runIndex(ShooterConstants.INDEX_SPEED), () -> m_Index.runIndex(0), m_Index)
     ));
 
-      //for testings 
-      /*Run shooter */
-      m_driverController.a().toggleOnTrue(
-       new StartEndCommand(
-        () -> m_Shooter.runShooter(ShooterConstants.SHOOTER_SPEED),
-        () -> m_Shooter.runShooter(0),
-        m_Shooter
-       ));
-     
-      /*Run index */
-      m_driverController.rightTrigger().whileTrue(
-        new StartEndCommand(
-          () -> m_Index.runIndex(ShooterConstants.INDEX_SPEED), 
-          () -> m_Index.runIndex(0), m_Index));   
-
   /*intake */
     //Extend Intake 
     m_driverController.leftBumper().onTrue(
@@ -127,12 +114,34 @@ public class RobotContainer {
       );
       
       m_driverController.y().whileTrue(
-             new StartEndCommand(
-          () -> m_IntakeMotor.runIntake(IntakeConstants.INTAKE_SPEED),
+        new StartEndCommand(
+          () -> m_IntakeMotor.runIntake(.4),
           () -> m_IntakeMotor.runIntake(0))
           .until(m_Intake.m_BooleanSupplier())
-          );}
-       
+          );
+
+      m_driverController.povCenter().onTrue(
+        new SequentialCommandGroup(
+          new StartEndCommand(
+            () -> m_IntakeMotor.runIntake(.4), 
+            () -> m_IntakeMotor.runIntake(0), m_IntakeMotor).until(
+              m_Intake.m_BooleanSupplier()),
+          new StartEndCommand(
+          () -> m_IntakeMotor.runIntake(-.1), 
+          () -> m_IntakeMotor.runIntake(0), m_IntakeMotor).until(
+            m_Intake.m_BooleanSupplierNot())));
+
+//sysid button mapping :)
+      m_driverController.povLeft().whileTrue(
+        m_DriveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+      m_driverController.povRight().whileTrue(
+        m_DriveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+      m_driverController.povUp().whileTrue(
+        m_DriveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+      m_driverController.povDown().whileTrue(
+        m_DriveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        }
+      
   
 
   /**
