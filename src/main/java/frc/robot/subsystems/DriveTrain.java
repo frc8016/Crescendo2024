@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.DriveTrainConstants;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -59,7 +60,7 @@ public class DriveTrain extends SubsystemBase {
                         m_appliedVoltage.mut_replace(
                             m_frontLeft.get() * RobotController.getBatteryVoltage(), Volts))
                             .linearPosition(m_distance.mut_replace(
-                                (m_leftEncoder).getPositionSinceBoot().getValue(), Meters))
+                                (m_leftEncoder).getPosition().getValue(), Meters))
                             .linearVelocity(m_velocity.mut_replace(
                                 m_leftEncoder.getVelocity().getValue(), MetersPerSecond));
                     log.motor("right drive")
@@ -67,7 +68,7 @@ public class DriveTrain extends SubsystemBase {
                         m_appliedVoltage.mut_replace(
                             m_frontRight.get() * RobotController.getBatteryVoltage(), Volts))
                         .linearPosition(m_distance.mut_replace(
-                            m_rightEncoder.getPositionSinceBoot().getValue(), Meters))
+                            m_rightEncoder.getPosition().getValue(), Meters))
                         .linearVelocity(
                             m_velocity.mut_replace(
                                 m_rightEncoder.getVelocity().getValue(), MetersPerSecond));
@@ -81,6 +82,15 @@ public DriveTrain(){
     //invert one side of drivetrain 
     m_frontLeft.setInverted(true);
     m_frontRight.setInverted(false);
+    m_frontRight.setIdleMode(IdleMode.kBrake);
+    m_frontLeft.setIdleMode(IdleMode.kBrake);
+    m_backLeft.setIdleMode(IdleMode.kBrake);
+    m_backRight.setIdleMode(IdleMode.kBrake);
+
+    m_frontLeft.burnFlash();
+    m_frontRight.burnFlash();
+    m_backLeft.burnFlash();
+    m_backRight.burnFlash();
 }
 /*encoder and pigeon things */
 

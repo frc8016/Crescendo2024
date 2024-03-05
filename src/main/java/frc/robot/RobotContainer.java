@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -102,35 +103,32 @@ public class RobotContainer {
     //run intake rollers
     m_driverController.b().whileTrue(
       new StartEndCommand(
-        () -> m_IntakeMotor.runIntake(IntakeConstants.INTAKE_SPEED),
+        () -> m_IntakeMotor.runIntake(-.5),
         () -> m_IntakeMotor.runIntake(0),
         m_Intake));
 
       m_driverController.a().whileTrue(
         new StartEndCommand(
-          () -> m_IntakeMotor.runIntake(-IntakeConstants.INTAKE_SPEED), 
+          () -> m_IntakeMotor.runIntake(.1), 
           () -> m_IntakeMotor.runIntake(0), 
           m_IntakeMotor)
       );
       
+      
       m_driverController.y().whileTrue(
-        new StartEndCommand(
-          () -> m_IntakeMotor.runIntake(.4),
-          () -> m_IntakeMotor.runIntake(0))
-          .until(m_Intake.m_BooleanSupplier())
-          );
-
-      m_driverController.povCenter().onTrue(
         new SequentialCommandGroup(
           new StartEndCommand(
-            () -> m_IntakeMotor.runIntake(.4), 
+            () -> m_IntakeMotor.runIntake(-.3), 
             () -> m_IntakeMotor.runIntake(0), m_IntakeMotor).until(
               m_Intake.m_BooleanSupplier()),
           new StartEndCommand(
-          () -> m_IntakeMotor.runIntake(-.1), 
+          () -> m_IntakeMotor.runIntake(.1), 
           () -> m_IntakeMotor.runIntake(0), m_IntakeMotor).until(
             m_Intake.m_BooleanSupplierNot())));
+          
+          
 
+       //
 //sysid button mapping :)
       m_driverController.povLeft().whileTrue(
         m_DriveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
@@ -140,8 +138,8 @@ public class RobotContainer {
         m_DriveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
       m_driverController.povDown().whileTrue(
         m_DriveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-        }
-      
+        
+  }
   
 
   /**
