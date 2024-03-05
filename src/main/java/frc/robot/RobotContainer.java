@@ -56,8 +56,15 @@ public class RobotContainer {
     m_autoChooser.setDefaultOption("auto1", Autos.runShooterAuto(m_Shooter, m_Index));
     m_autoChooser.addOption("auto2", Autos.extendIntakeAuto(m_Intake));
     m_autoChooser.addOption("auto3", Autos.retractIntakeAuto(m_Intake));
-    m_autoChooser.addOption("auto4", Autos.feedIntoShooterAuto(m_IntakeMotor));
-    m_autoChooser.addOption("auto5", Autos.runInakeMotorAuto(m_IntakeMotor, m_Intake));
+    m_autoChooser.addOption("try auto thing :)", 
+    new SequentialCommandGroup(
+      new ParallelCommandGroup(
+        Autos.runShooterAuto(m_Shooter, m_Index),
+        new WaitCommand(2), 
+        Autos.feedIntoShooterAuto(m_IntakeMotor)),
+      Autos.extendIntakeAuto(m_Intake)
+    ));
+  
 
     SmartDashboard.putData(m_autoChooser);
 

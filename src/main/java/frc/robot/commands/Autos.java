@@ -13,6 +13,7 @@ import frc.robot.subsystems.IntakeMotor;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public final class Autos {
   /** Example static factory for an autonomous command. */
@@ -29,11 +30,11 @@ public final class Autos {
         () -> shooter.runShooter(ShooterConstants.SHOOTER_SPEED), shooter),
         Commands.runOnce(
           () -> index.runIndex(ShooterConstants.INDEX_SPEED), index)),
-      Commands.runOnce(
-        () -> intake.extendIntake(), intake),
-      Commands.runOnce(
-        () -> intakeMotor.runIntake(IntakeConstants.INTAKE_MOTOR), intakeMotor).until(intake.m_BooleanSupplier()));   
+        new WaitCommand(2),
+        Commands.runOnce(() -> intakeMotor.runIntake(-.5), intakeMotor));  
   }
+
+
 
 
  /*runs the shooter and index at the same time :) */
@@ -49,11 +50,9 @@ public final class Autos {
   /*runs the intake motor to feed the note into the shooter */
   public static Command feedIntoShooterAuto(IntakeMotor intakeMotor){
     return 
-    Commands.sequence(
-      Commands.runOnce(
-      () -> intakeMotor.runIntake(IntakeConstants.INTAKE_SPEED), intakeMotor));
+    Commands.runOnce(
+      () -> intakeMotor.runIntake(-.5), intakeMotor);
   }
-
 
 
   public static Command taxiToNote(){
@@ -67,11 +66,7 @@ public final class Autos {
 
 
   /*runs the intake motor to pick up the note */
-  public static Command runInakeMotorAuto(IntakeMotor intakeMotor, Intake intake){
-    return Commands.sequence(
-      Commands.runOnce(() -> intakeMotor.runIntake(IntakeConstants.INTAKE_SPEED), intakeMotor).until(intake.m_BooleanSupplier()
-    ));
-  }
+  
 
 
 /*retracts the intake  */
