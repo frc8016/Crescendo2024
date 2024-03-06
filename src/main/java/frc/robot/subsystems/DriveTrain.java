@@ -60,18 +60,18 @@ public class DriveTrain extends SubsystemBase {
                         m_appliedVoltage.mut_replace(
                             m_frontLeft.get() * RobotController.getBatteryVoltage(), Volts))
                             .linearPosition(m_distance.mut_replace(
-                                (m_leftEncoder).getPosition().getValue(), Meters))
+                                (m_leftEncoder).getPosition().getValueAsDouble(), Meters))
                             .linearVelocity(m_velocity.mut_replace(
-                                m_leftEncoder.getVelocity().getValue(), MetersPerSecond));
+                                m_leftEncoder.getVelocity().getValueAsDouble(), MetersPerSecond));
                     log.motor("right drive")
                     .voltage(
                         m_appliedVoltage.mut_replace(
                             m_frontRight.get() * RobotController.getBatteryVoltage(), Volts))
                         .linearPosition(m_distance.mut_replace(
-                            m_rightEncoder.getPosition().getValue(), Meters))
+                            m_rightEncoder.getPosition().getValueAsDouble(), Meters))
                         .linearVelocity(
                             m_velocity.mut_replace(
-                                m_rightEncoder.getVelocity().getValue(), MetersPerSecond));
+                                m_rightEncoder.getVelocity().getValueAsDouble(), MetersPerSecond));
                 },
                 this));
 
