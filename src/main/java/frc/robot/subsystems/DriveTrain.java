@@ -5,11 +5,21 @@ import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
+import java.util.List;
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.proto.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
@@ -19,10 +29,13 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.DriveTrainConstants;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
  
 
@@ -46,7 +59,7 @@ public class DriveTrain extends SubsystemBase {
     //gyro 
     private final WPI_PigeonIMU m_gyro = new WPI_PigeonIMU(11);
     //odometry for checking robot pose/position
-    private final DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(null, null, null); 
+   private final DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance()); 
     
     //sysId nonsence 
    private final MutableMeasure <Voltage> m_appliedVoltage = mutable(Volts.of(0));
@@ -94,15 +107,41 @@ public DriveTrain(){
     //set encoders distance per pulse 
     m_leftEncoder.setDistancePerPulse(DriveTrainConstants.kEncoderDistencePerPulse);
     m_rightEncoder.setDistancePerPulse(DriveTrainConstants.kEncoderDistencePerPulse);
+    //set idle mode 
+    setIdleModeBrake();
 
-    resetEncoders();
-
-    new DifferentialDriveOdometry(m_gyro.getRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
 }
+//set idle mode to brake
+public void setIdleModeBrake(){
+    m_frontLeft.setIdleMode(IdleMode.kBrake);
+    m_frontRight.setIdleMode(IdleMode.kBrake);
+    m_backLeft.setIdleMode(IdleMode.kBrake);
+    m_backRight.setIdleMode(IdleMode.kBrake);
 
+    m_frontLeft.burnFlash();
+    m_frontRight.burnFlash();
+    m_backLeft.burnFlash();
+    m_backRight.burnFlash();
+}
+//sets idle mode to coast
+public void setIdleModeCoast(){
+    m_frontLeft.setIdleMode(IdleMode.kCoast);
+    m_frontRight.setIdleMode(IdleMode.kCoast);
+    m_backLeft.setIdleMode(IdleMode.kCoast);
+    m_backRight.setIdleMode(IdleMode.kCoast);
+
+    m_frontLeft.burnFlash();
+    m_frontRight.burnFlash();
+    m_backLeft.burnFlash();
+    m_backRight.burnFlash();
+}
+/*stuff i think i copy and pasted from sysID 
+ * runs the test :)
+ */
 public Command arcadeDriveCommand(DoubleSupplier fwd, DoubleSupplier rot) {
     return run( () -> m_drive.arcadeDrive(fwd.getAsDouble(), rot.getAsDouble()));
 }
+
 public Command sysIdQuasistatic(SysIdRoutine.Direction direction){
     return m_SysIdRoutine.quasistatic(direction);
 }
@@ -111,80 +150,65 @@ public Command sysIdDynamic(SysIdRoutine.Direction direction){
     return m_SysIdRoutine.dynamic(direction);
 }
 
-@Override 
+@Override
 public void periodic(){
-    //update odometry 
     m_odometry.update(
-        m_gyro.getRotation2d(),
-        m_leftEncoder.getDistance(), m_rightEncoder.getDistance() );
+        m_gyro.getRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
 }
 
-//returns estimated pose of robot
 public Pose2d getPose(){
     return m_odometry.getPoseMeters();
 }
 
-//return current wheel speed
-public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+public DifferentialDriveWheelSpeeds getWheelSpeeds(){
     return new DifferentialDriveWheelSpeeds(m_leftEncoder.getRate(), m_rightEncoder.getRate());
 }
-    
-//reste odometry to the specified pose 
-public void resetOdometry(Pose2d pose) {
-    resetEncoders();
-    
-    m_odometry.resetPosition(null, m_leftEncoder.getDistance(),m_rightEncoder.getDistance(), pose);
+
+public void resetOdometry(Pose2d pose){
+    m_odometry.resetPosition(
+        m_gyro.getRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance(), pose);
 }
 
-//arcade drive (actually drives the robot!)
-public void arcadeDrive(double speed, double rotation) {
+public void arcadeDrive(double speed, double rotation){
     m_drive.arcadeDrive(-speed, -rotation);
 }
 
-//control left and right side directly with voltage 
-public void tankDriveVolts(double leftVolts, double rightVolts) {
+public void tankDriveVolts(double leftVolts, double rightVolts){
     m_frontLeft.setVoltage(leftVolts);
-    m_backLeft.setVoltage(rightVolts);
+    m_frontRight.setVoltage(rightVolts);
     m_drive.feed();
 }
 
-//reset encoders 
 public void resetEncoders(){
     m_leftEncoder.reset();
     m_rightEncoder.reset();
 }
 
-//get averge distance of two encoders
 public double getAverageEncoderDistance(){
-    return (m_leftEncoder.getDistance() + m_rightEncoder.getDistance() / 2.0);
+    return (m_leftEncoder.getDistance() + m_rightEncoder.getDistance()) / 2.0;
 }
 
-//get the left encoder 
 public Encoder getLeftEncoder(){
     return m_leftEncoder;
 }
 
-//get right encoder
 public Encoder getRightEncoder(){
     return m_rightEncoder;
 }
 
-//set max outputes of the drive 
-public void setMaxOutput(double maxOutput) {
-    m_drive.setMaxOutput(maxOutput); 
+public void setMoxOutput(double maxOutput){
+    m_drive.setMaxOutput(maxOutput);
 }
 
-//zero heading of the robot using gyro
-public void zeroHeading() {
+public void zeroHeading(){
     m_gyro.reset();
 }
 
-//return heading of the robot
 public double getHeading(){
     return m_gyro.getRotation2d().getDegrees();
 }
-//return turn rate of the robot
+
 public double getTurnRate(){
     return -m_gyro.getRate();
-}
+    }
 }

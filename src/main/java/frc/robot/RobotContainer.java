@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import frc.robot.Constants.DriveTrainConstants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.Autos;
@@ -13,20 +15,31 @@ import frc.robot.subsystems.Index;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.IntakeMotor;
 import frc.robot.subsystems.Shooter;
+
+import java.util.List;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
-
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -56,29 +69,15 @@ public class RobotContainer {
     m_autoChooser.setDefaultOption("auto1", Autos.runShooterAuto(m_Shooter, m_Index));
     m_autoChooser.addOption("auto2", Autos.extendIntakeAuto(m_Intake));
     m_autoChooser.addOption("auto3", Autos.retractIntakeAuto(m_Intake));
-    m_autoChooser.addOption("try auto thing :)", 
-    new SequentialCommandGroup(
-      new ParallelCommandGroup(
-        Autos.runShooterAuto(m_Shooter, m_Index),
-        new WaitCommand(2), 
-        Autos.feedIntoShooterAuto(m_IntakeMotor)),
-      Autos.extendIntakeAuto(m_Intake)
-    ));
-  
+    
 
     SmartDashboard.putData(m_autoChooser);
 
     // Configure the trigger bindings
     configureBindings();
     //run the drivetrain 
-    m_DriveTrain.setDefaultCommand(
-      new RunCommand(
-        () -> m_DriveTrain.arcadeDrive(
-          m_Joystick.getRawAxis(OperatorConstants.JOYSTICK_Y_AXIS),
-          m_Joystick.getRawAxis(OperatorConstants.JOYSTIC_X_AXIS)),
-       m_DriveTrain));
+  
   }
-
 
 
   /**
@@ -91,7 +90,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-   //shooter (need to check whats wrong with this) :)
+   //shooter + index spped to shoot
    m_driverController
   .x()
   .toggleOnTrue(
@@ -107,13 +106,14 @@ public class RobotContainer {
     //Retract intake
       m_driverController.rightBumper().onTrue(
         new RunCommand(() -> m_Intake.retractIntake(), m_Intake));
-    //run intake rollers
+   
+        //run intake rollers
     m_driverController.b().whileTrue(
       new StartEndCommand(
-        () -> m_IntakeMotor.runIntake(-.5),
+        () -> m_IntakeMotor.runIntake(IntakeConstants.INTAKE_SPEED),
         () -> m_IntakeMotor.runIntake(0),
         m_Intake));
-
+      //reverse intake motors
       m_driverController.a().whileTrue(
         new StartEndCommand(
           () -> m_IntakeMotor.runIntake(.1), 
@@ -121,7 +121,7 @@ public class RobotContainer {
           m_IntakeMotor)
       );
       
-      
+      //run intake motors with beam break to stop it 
       m_driverController.y().whileTrue(
         new SequentialCommandGroup(
           new StartEndCommand(
@@ -133,15 +133,65 @@ public class RobotContainer {
           () -> m_IntakeMotor.runIntake(0), m_IntakeMotor).until(
             m_Intake.m_BooleanSupplierNot())));
           
-      m_driverController.povUp().whileTrue(
+      /*m_driverController.povUp().whileTrue(
         new StartEndCommand(() -> m_Climb.raiseClimb(.5), () -> m_Climb.raiseClimb(0), m_Climb));
 
       m_driverController.povDown().whileTrue(
         new StartEndCommand(() -> m_Climb.lowerClimb(.5), () -> m_Climb.lowerClimb(0), m_Climb));
+*/
+      m_driverController.povLeft().whileTrue(
+        m_DriveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+      m_driverController.povRight().whileTrue(
+        m_DriveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+      m_driverController.povUp().whileTrue(
+        m_DriveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+      m_driverController.povDown().whileTrue(
+        m_DriveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
   }
 
   
+public Command autoThing(){
+    var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
+        new SimpleMotorFeedforward(
+            DriveTrainConstants.ks_left, 
+            DriveTrainConstants.kv_left,
+            DriveTrainConstants.ka_left), null, 10);
+
+    TrajectoryConfig config = new TrajectoryConfig(
+        10, 10)
+        .setKinematics(DriveTrainConstants.kDriveKinematics)
+        .addConstraint(null);
+
+    edu.wpi.first.math.trajectory.Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+        new Pose2d(0,0, new Rotation2d()),
+        List.of(new Translation2d(1,1), new Translation2d(2, -1)),
+        new Pose2d(3, 0, new Rotation2d()),
+        config);
+
+        RamseteCommand ramseteCommand = 
+        new RamseteCommand(
+          trajectory,
+           m_DriveTrain::getPose,
+         new RamseteController(
+          DriveTrainConstants.kRamseteB, DriveTrainConstants.kRamseteZeta),
+          new SimpleMotorFeedforward(
+            DriveTrainConstants.ks_left, 
+            DriveTrainConstants.kv_left,
+            DriveTrainConstants.ka_left),
+            DriveTrainConstants.kDriveKinematics,
+           m_DriveTrain::getWheelSpeeds, 
+        new PIDController(DriveTrainConstants.kp_left, DriveTrainConstants.ki_left, DriveTrainConstants.kd_left),
+        new PIDController(DriveTrainConstants.kp_right, DriveTrainConstants.ki_right, DriveTrainConstants.kd_right),
+        m_DriveTrain::tankDriveVolts,
+        m_DriveTrain);
+
+        return Commands.runOnce(() -> m_DriveTrain.resetOdometry(trajectory.getInitialPose()))
+        .andThen(ramseteCommand)
+        .andThen(Commands.runOnce(() -> m_DriveTrain.tankDriveVolts(0, 0)));
+}
+
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
