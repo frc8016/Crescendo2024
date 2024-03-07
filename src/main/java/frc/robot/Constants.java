@@ -38,7 +38,7 @@ public final class Constants {
 
     public static final double kEncoderDistencePerPulse = 0.479 / 4096.0;
     //kinematics 
-    public static final double kTrackWidthMeters = 0;
+    public static final double kTrackWidthMeters = .635;
     public static final DifferentialDriveKinematics kDriveKinematics = 
       new DifferentialDriveKinematics(kTrackWidthMeters);
 
@@ -48,19 +48,19 @@ public final class Constants {
     public static final double kRamseteB = 2;
     public static final double kRamseteZeta = .7;
     //PID stuff
-    public static final double kp_left = 0;
-    public static final double kd_left = 0;
+    public static final double kp_left = .6;
+    public static final double kd_left = 0.05;
     public static final double ki_left = 0;
 
-    public static final double kp_right = 0;
-    public static final double kd_right = 0;
+    public static final double kp_right = .6;
+    public static final double kd_right = 0.05;
     public static final double ki_right = 0;
 
-    public static final double ka_left = 0;
-    public static final double kv_left = 0;
+    public static final double ka_left = .01;
+    public static final double kv_left = .01;
     public static final double ks_left = 0;
-    public static final double ka_right = 0;
-    public static final double kv_right = 0; 
+    public static final double ka_right = .01;
+    public static final double kv_right = .01; 
     public static final double ks_right = 0;
 
    

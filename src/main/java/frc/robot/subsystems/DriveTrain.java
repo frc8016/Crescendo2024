@@ -53,8 +53,8 @@ public class DriveTrain extends SubsystemBase {
     private final DifferentialDrive m_drive = new DifferentialDrive(m_frontLeft, m_frontRight);
     //Encoders
   
-    private final Encoder m_leftEncoder = new Encoder(DriveTrainConstants.LEFT_ENCODER_A, DriveTrainConstants.LEFT_ENCODER_B);
-    private final Encoder m_rightEncoder = new Encoder(DriveTrainConstants.RIGHT_ENCODER_A, DriveTrainConstants.RIGHT_ENCODER_B);
+    private final Encoder m_leftEncoder = new Encoder(DriveTrainConstants.LEFT_ENCODER_A, DriveTrainConstants.LEFT_ENCODER_B, true);
+    private final Encoder m_rightEncoder = new Encoder(DriveTrainConstants.RIGHT_ENCODER_A, DriveTrainConstants.RIGHT_ENCODER_B, true);
 
     //gyro 
     private final WPI_PigeonIMU m_gyro = new WPI_PigeonIMU(11);
@@ -108,7 +108,7 @@ public DriveTrain(){
     m_leftEncoder.setDistancePerPulse(DriveTrainConstants.kEncoderDistencePerPulse);
     m_rightEncoder.setDistancePerPulse(DriveTrainConstants.kEncoderDistencePerPulse);
     //set idle mode 
-    setIdleModeBrake();
+    setIdleModeCoast();
 
 }
 //set idle mode to brake
@@ -135,25 +135,16 @@ public void setIdleModeCoast(){
     m_backLeft.burnFlash();
     m_backRight.burnFlash();
 }
-/*stuff i think i copy and pasted from sysID 
- * runs the test :)
- */
-public Command arcadeDriveCommand(DoubleSupplier fwd, DoubleSupplier rot) {
-    return run( () -> m_drive.arcadeDrive(fwd.getAsDouble(), rot.getAsDouble()));
-}
 
-public Command sysIdQuasistatic(SysIdRoutine.Direction direction){
-    return m_SysIdRoutine.quasistatic(direction);
-}
 
-public Command sysIdDynamic(SysIdRoutine.Direction direction){
-    return m_SysIdRoutine.dynamic(direction);
-}
 
 @Override
 public void periodic(){
     m_odometry.update(
         m_gyro.getRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
+
+    System.out.println("left encoder" + m_leftEncoder.getDistance());
+    System.out.println("right encoder" + m_rightEncoder.getDistance());
 }
 
 public Pose2d getPose(){
@@ -173,7 +164,13 @@ public void arcadeDrive(double speed, double rotation){
     m_drive.arcadeDrive(-speed, -rotation);
 }
 
-public void tankDriveVolts(double leftVolts, double rightVolts){
+public void tankDriveVoltsFwd(double leftVolts, double rightVolts){
+    m_frontLeft.setVoltage(-leftVolts);
+    m_frontRight.setVoltage(-rightVolts);
+    m_drive.feed();
+}
+
+public void tankDriveVoltsBkw(double leftVolts, double rightVolts){
     m_frontLeft.setVoltage(leftVolts);
     m_frontRight.setVoltage(rightVolts);
     m_drive.feed();
@@ -211,4 +208,5 @@ public double getHeading(){
 public double getTurnRate(){
     return -m_gyro.getRate();
     }
+    
 }
