@@ -7,7 +7,21 @@ import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
+import java.util.List;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.proto.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.TrajectoryParameterizer.TrajectoryGenerationException;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
@@ -23,6 +37,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 import com.ctre.phoenix6.hardware.CANcoder;
 
 public class DriveTrain extends SubsystemBase {
@@ -34,46 +49,15 @@ public class DriveTrain extends SubsystemBase {
     //motor controller groups
     private final DifferentialDrive m_drive = new DifferentialDrive(m_frontLeft, m_frontRight);
     //Encoders
-    private final CANcoder m_leftEncoder = new CANcoder(10);
-    private final CANcoder m_rightEncoder = new CANcoder(9);
-    //pigeon
-    private final PigeonIMU m_pigeon = new PigeonIMU(11);
+    //pigion
+    private final WPI_PigeonIMU m_pigeon = new WPI_PigeonIMU(11);
 
-   // private final DifferentialDriveOdometry m_Odometry = new DifferentialDriveOdometry(null, null, null);
-/*sysID stuff 
-(my favorite)*/
-    private final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
-    private final MutableMeasure<Distance> m_distance = mutable(Meters.of(0));
-    private final MutableMeasure<Velocity<Distance>> m_velocity = mutable(MetersPerSecond.of(0));
+    
 
-    private final SysIdRoutine m_SysIdRoutine= 
-        new SysIdRoutine(
-            new SysIdRoutine.Config(), 
-            new SysIdRoutine.Mechanism(
-                (Measure<Voltage> volts) -> {
-                    m_frontLeft.setVoltage(volts.in(Volts));
-                    m_frontRight.setVoltage(volts.in(Volts));
-                }, 
-                log -> {
-                    log.motor("left drive")
-                    .voltage(
-                        m_appliedVoltage.mut_replace(
-                            m_frontLeft.get() * RobotController.getBatteryVoltage(), Volts))
-                            .linearPosition(m_distance.mut_replace(
-                                (m_leftEncoder).getPosition().getValueAsDouble(), Meters))
-                            .linearVelocity(m_velocity.mut_replace(
-                                m_leftEncoder.getVelocity().getValueAsDouble(), MetersPerSecond));
-                    log.motor("right drive")
-                    .voltage(
-                        m_appliedVoltage.mut_replace(
-                            m_frontRight.get() * RobotController.getBatteryVoltage(), Volts))
-                        .linearPosition(m_distance.mut_replace(
-                            m_rightEncoder.getPosition().getValueAsDouble(), Meters))
-                        .linearVelocity(
-                            m_velocity.mut_replace(
-                                m_rightEncoder.getVelocity().getValueAsDouble(), MetersPerSecond));
-                },
-                this));
+
+    private final PIDController m_leftPID = new PIDController(DriveTrainConstants.kp_left, DriveTrainConstants.kd_left, DriveTrainConstants.ki_left);
+    private final PIDController m_rightPID = new PIDController(DriveTrainConstants.kp_right, DriveTrainConstants.kd_right, DriveTrainConstants.ki_right);
+  //PID controllers 
 
 // new drive subsystem
 public DriveTrain(){
@@ -82,36 +66,19 @@ public DriveTrain(){
     //invert one side of drivetrain 
     m_frontLeft.setInverted(true);
     m_frontRight.setInverted(false);
-    m_frontRight.setIdleMode(IdleMode.kBrake);
-    m_frontLeft.setIdleMode(IdleMode.kBrake);
-    m_backLeft.setIdleMode(IdleMode.kBrake);
-    m_backRight.setIdleMode(IdleMode.kBrake);
 
-    m_frontLeft.burnFlash();
-    m_frontRight.burnFlash();
-    m_backLeft.burnFlash();
-    m_backRight.burnFlash();
+
+  
 }
 /*encoder and pigeon things */
-
-
-//arcade drive (actually drives the robot!)
-public void arcadeDrive(double speed, double rotation) {
+public void arcadeDrive(double speed, double rotation ){
     m_drive.arcadeDrive(-speed, -rotation);
 }
 
 
-/*more sysID stuff 
- * yaaaaaaay
- */
-public Command sysIdQuasistatic(SysIdRoutine.Direction direction){
-    return m_SysIdRoutine.quasistatic(direction);
+
+
+@Override
+public void periodic(){
 }
-
-public Command sysIdDynamic(SysIdRoutine.Direction direction){
-    return m_SysIdRoutine.dynamic(direction);
-}
-
-
-
 }

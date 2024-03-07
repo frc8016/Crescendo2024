@@ -30,6 +30,23 @@ public final class Constants {
     public static final int RIGHT_ENCODER_ID = 9;
     public static final int LEFT_ENCODER_ID = 10;
     public static final double kEncoderDistencePerPulse = 0.479 / 4096.0;
+    //PID stuff
+    public static final double kp_left = 0;
+    public static final double kd_left = 0;
+    public static final double ki_left = 0;
+
+    public static final double kp_right = 0;
+    public static final double kd_right = 0;
+    public static final double ki_right = 0;
+
+    public static final double ka_left = 0;
+    public static final double kv_left = 0;
+    public static final double ks_left = 0;
+    public static final double ka_right = 0;
+    public static final double kv_right = 0; 
+    public static final double ks_right = 0;
+
+   
     //pigion id 
     public static final int PIGION_ID = 11; 
   }

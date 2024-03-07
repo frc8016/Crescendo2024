@@ -10,16 +10,18 @@ public class Climb extends SubsystemBase{
     private final CANSparkMax m_left = new CANSparkMax(ClimbConstants.LEFT, MotorType.kBrushless);
     private final CANSparkMax m_right = new CANSparkMax(ClimbConstants.RIGHT, MotorType.kBrushless);
 
-public Climb(){}
+public Climb(){
+    m_left.setInverted(true);
+}
 
 public void raiseClimb(double speed){
-    m_left.set(speed);
-    m_right.set(speed);
+    m_left.set(-speed);
+    m_right.set(-speed);
 }
 
 public void lowerClimb(double speed){
-    m_left.set(-speed);
-    m_right.set(-speed);
+    m_left.set(speed);
+    m_right.set(speed);
 }
 
 @Override

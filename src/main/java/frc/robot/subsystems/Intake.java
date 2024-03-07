@@ -52,6 +52,9 @@ public class Intake extends SubsystemBase {
         System.out.println("beam break get " + beamBroken());
 
         SmartDashboard.putBoolean("Note in intake", !beamBroken());
+
+       // Lidar.getDistanceMM();
+       // System.out.println("Lidar distance" + Lidar.getDistanceMM());
     }
     }
 

@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.Autos;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Index;
 import frc.robot.subsystems.Intake;
@@ -40,7 +41,7 @@ public class RobotContainer {
 //subsystems 
   private final DriveTrain m_DriveTrain = new DriveTrain();
   private final Shooter m_Shooter = new Shooter();
- //private final Climb m_Climb = new Climb();
+ private final Climb m_Climb = new Climb();
   private final Intake m_Intake = new Intake();
   private final Index m_Index = new Index();
   private final IntakeMotor m_IntakeMotor = new IntakeMotor();
@@ -132,20 +133,14 @@ public class RobotContainer {
           () -> m_IntakeMotor.runIntake(0), m_IntakeMotor).until(
             m_Intake.m_BooleanSupplierNot())));
           
-          
-
-       //
-//sysid button mapping :)
-      m_driverController.povLeft().whileTrue(
-        m_DriveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-      m_driverController.povRight().whileTrue(
-        m_DriveTrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
       m_driverController.povUp().whileTrue(
-        m_DriveTrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        new StartEndCommand(() -> m_Climb.raiseClimb(.5), () -> m_Climb.raiseClimb(0), m_Climb));
+
       m_driverController.povDown().whileTrue(
-        m_DriveTrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-        
+        new StartEndCommand(() -> m_Climb.lowerClimb(.5), () -> m_Climb.lowerClimb(0), m_Climb));
+
   }
+
   
 
   /**
