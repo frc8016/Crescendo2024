@@ -4,15 +4,12 @@
 
 package frc.robot.commands;
 
-import frc.robot.RobotContainer;
-import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Index;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.IntakeMotor;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Taxi;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -47,9 +44,9 @@ public final class Autos {
               () -> shooter.runShooter(0), shooter),
           Commands.runOnce(
             () -> intakeMotor.runIntake(0), intakeMotor)),
-            //taxi 
+            
 
-            //extend intake to pik up note
+            //extend intake to pick up note
            Commands.runOnce(
         () -> intake.extendIntake(), intake),
         //pick up note

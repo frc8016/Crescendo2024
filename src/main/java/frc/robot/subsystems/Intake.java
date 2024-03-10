@@ -48,10 +48,10 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic(){
         m_BooleanSupplier();
-        System.out.println(m_BooleanSupplier());
-        System.out.println("beam break get " + beamBroken());
+      //  System.out.println(m_BooleanSupplier());
+      //  System.out.println("beam break get " + beamBroken());
 
-        SmartDashboard.putBoolean("Note in intake", !beamBroken());
+       SmartDashboard.putBoolean("Note in intake", !beamBroken());
 
        // Lidar.getDistanceMM();
        // System.out.println("Lidar distance" + Lidar.getDistanceMM());

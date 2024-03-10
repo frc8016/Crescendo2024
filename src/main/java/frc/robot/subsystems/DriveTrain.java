@@ -143,8 +143,8 @@ public void periodic(){
     m_odometry.update(
         m_gyro.getRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
 
-    System.out.println("left encoder" + m_leftEncoder.getDistance());
-    System.out.println("right encoder" + m_rightEncoder.getDistance());
+   // System.out.println("left encoder" + m_leftEncoder.getDistance());
+    //System.out.println("right encoder" + m_rightEncoder.getDistance());
 }
 
 public Pose2d getPose(){

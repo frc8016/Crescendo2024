@@ -67,19 +67,36 @@ public class RobotContainer {
   public RobotContainer() {
     //this is the auto we will be using 
     //score preload, taxi and pick up 
-    m_autoChooser.addOption("Current auto", 
+    m_autoChooser.addOption("Score + taxi ", 
     Commands.sequence(
+      //shoot
       Autos.autoGroup3(m_Shooter, m_Index, m_IntakeMotor), 
-      Commands.parallel( 
-        autoThing(),
-        Autos.autoGroup2(m_Intake, m_IntakeMotor))
-  ));
-     
+     //drop intake
+     Commands.parallel(
+      Autos.autoGroup2(m_Intake, m_IntakeMotor),
+      //taxi 
+      autoTaxi()),
+      autoTaxiReversed(),
+      Autos.autoGroup3(m_Shooter, m_Index, m_IntakeMotor)
+        ));
+    
+  m_autoChooser.addOption(
+    "auto no taxi ", 
+      Autos.autoGroup3(m_Shooter, m_Index, m_IntakeMotor));
+
+      m_autoChooser.addOption("reverse", autoTaxiReversed());
+
+      m_autoChooser.addOption("taxi", autoTaxi());
+
+      m_autoChooser.addOption("test", 
+      Commands.sequence(
+        autoTaxi(),
+        autoTaxiReversed()
+      ));
       
 
-    m_autoChooser.addOption("auto thing reverse", Commands.sequence(
-      autoThingReversed()
-    ) );
+ 
+   
 
     SmartDashboard.putData(m_autoChooser);
 
@@ -144,20 +161,22 @@ public class RobotContainer {
             () -> m_IntakeMotor.runIntake(0), m_IntakeMotor).until(
               m_Intake.m_BooleanSupplier()),
           new StartEndCommand(
-          () -> m_IntakeMotor.runIntake(.1), 
+          () -> m_IntakeMotor.runIntake(.05), 
           () -> m_IntakeMotor.runIntake(0), m_IntakeMotor).until(
             m_Intake.m_BooleanSupplierNot())));
           
       m_driverController.povUp().whileTrue(
-        new StartEndCommand(() -> m_Climb.raiseClimb(.5), () -> m_Climb.raiseClimb(0), m_Climb));
-
+        new ParallelCommandGroup(new StartEndCommand(() -> m_Climb.raiseClimb(.5), () -> m_Climb.raiseClimb(0), m_Climb),
+        new RunCommand(() -> m_Shooter.runShooter(0), m_Shooter))
+);
+        
       m_driverController.povDown().whileTrue(
         new StartEndCommand(() -> m_Climb.lowerClimb(.5), () -> m_Climb.lowerClimb(0), m_Climb));
 
   
 
   }
-public Command autoThing(){
+public Command autoTaxi(){
     var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
         new SimpleMotorFeedforward(
             DriveTrainConstants.ks_left, 
@@ -199,7 +218,7 @@ public Command autoThing(){
 }
 
   
-public Command autoThingReversed(){
+public Command autoTaxiReversed(){
     var autoVoltageConstraintReversed = new DifferentialDriveVoltageConstraint(
         new SimpleMotorFeedforward(
             DriveTrainConstants.ks_left, 
@@ -208,19 +227,20 @@ public Command autoThingReversed(){
             DriveTrainConstants.kDriveKinematics, .5);
 
     TrajectoryConfig config = new TrajectoryConfig(
-        .5, .5)
+        2, 2)
         .setKinematics(DriveTrainConstants.kDriveKinematics)
         .addConstraint(autoVoltageConstraintReversed);
 
-    edu.wpi.first.math.trajectory.Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0,0, new Rotation2d()),
-        List.of(new Translation2d(-1,0)),
-        new Pose2d(-3, 0, new Rotation2d()),
-        config);
+    edu.wpi.first.math.trajectory.Trajectory trajectory2 = TrajectoryGenerator.generateTrajectory(
+        new Pose2d(3,0, new Rotation2d()),
+        List.of(new Translation2d(2,0)),
+        new Pose2d(0, 0, new Rotation2d()),
+        config.setReversed(true));
+        
 
         RamseteCommand ramseteCommand = 
         new RamseteCommand(
-          trajectory,
+          trajectory2,
            m_DriveTrain::getPose,
          new RamseteController(
           DriveTrainConstants.kRamseteB, DriveTrainConstants.kRamseteZeta),
@@ -232,12 +252,12 @@ public Command autoThingReversed(){
            m_DriveTrain::getWheelSpeeds, 
         new PIDController(DriveTrainConstants.kp_left, DriveTrainConstants.ki_left, DriveTrainConstants.kd_left),
         new PIDController(DriveTrainConstants.kp_right, DriveTrainConstants.ki_right, DriveTrainConstants.kd_right),
-        m_DriveTrain::tankDriveVoltsBkw,
+        m_DriveTrain::tankDriveVoltsFwd,
         m_DriveTrain);
 
-        return Commands.runOnce(() -> m_DriveTrain.resetOdometry(trajectory.getInitialPose()))
+        return Commands.runOnce(() -> m_DriveTrain.resetOdometry(trajectory2.getInitialPose()))
         .andThen(ramseteCommand)
-        .andThen(Commands.runOnce(() -> m_DriveTrain.tankDriveVoltsBkw(0, 0)));
+        .andThen(Commands.runOnce(() -> m_DriveTrain.tankDriveVoltsFwd(0, 0)));
 }
 
 
