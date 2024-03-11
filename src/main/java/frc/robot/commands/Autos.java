@@ -94,6 +94,7 @@ public final class Autos {
         () -> intake.retractIntake(), intake)));
   }
 
+
   public static Command autoGroup3(Shooter shooter, Index index, IntakeMotor intakeMotor){
     return Commands.sequence(
     Commands.parallel(

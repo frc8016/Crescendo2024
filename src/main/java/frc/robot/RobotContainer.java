@@ -77,6 +77,7 @@ public class RobotContainer {
       //taxi 
       autoTaxi()),
       autoTaxiReversed(),
+      Autos.retractIntakeAuto(m_Intake),
       Autos.autoGroup3(m_Shooter, m_Index, m_IntakeMotor)
         ));
     
