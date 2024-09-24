@@ -45,7 +45,6 @@ public final class Autos {
           Commands.runOnce(
             () -> intakeMotor.runIntake(0), intakeMotor)),
             
-
             //extend intake to pick up note
            Commands.runOnce(
         () -> intake.extendIntake(), intake),

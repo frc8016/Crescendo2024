@@ -25,16 +25,16 @@ public final class Constants {
   public static class DriveTrainConstants {
     //drivetrain motor controller id
     public static final int FRONT_LEFT_ID = 6;
-    public static final int BACK_LEFT_ID = 5;
+    public static final int BACK_LEFT_ID = 2;
     public static final int FRONT_RIGHT_ID = 3;
     public static final int BACK_RIGHT_ID = 4;
     //encoder constants 
-    public static final int LEFT_ENCODER_A = 7;
-    public static final int RIGHT_ENCODER_A = 5;
-     public static final int LEFT_ENCODER_B = 8;
-    public static final int RIGHT_ENCODER_B = 4;
-    public static final int LEFT_ABSOLUTE_ENCODER = 9;
-    public static final int RIGHT_ABSOLUTE_ENCODER = 6;
+    public static final int LEFT_ENCODER_A = 5;
+    public static final int RIGHT_ENCODER_A = 1;
+     public static final int LEFT_ENCODER_B = 3;
+    public static final int RIGHT_ENCODER_B = 0;
+    public static final int LEFT_ABSOLUTE_ENCODER = 4;
+    public static final int RIGHT_ABSOLUTE_ENCODER = 2;
 
     public static final double kEncoderDistencePerPulse = 0.479 / 4096.0;
     //kinematics 
@@ -70,10 +70,10 @@ public final class Constants {
 
   public static class ShooterConstants{
     //motor controller id
-    public static final int SHOOTER_LEFT = 1; 
-    public static final int SHOOTER_RIGHT = 2;
+    public static final int SHOOTER_LEFT = 7; 
+    public static final int SHOOTER_RIGHT = 8;
     //index motor controller
-    public static final int INDEX_ID = 7; 
+    public static final int INDEX_ID = 1; 
     //speeds
     public static final double SHOOTER_SPEED = -.7; 
   
@@ -85,18 +85,18 @@ public final class Constants {
   public static class IntakeConstants{
     public static final int BEAM_BREAK_INTAKE_ID1 = 0;
     //intake motor id
-    public static final int INTAKE_MOTOR = 8; 
+    public static final int INTAKE_MOTOR = 5; 
     //intake motor spped
     public static final double INTAKE_SPEED = -.5;
     //pnumatics
-    public static final int SOLENOID_FWD = 7;
-    public static final int SOLENOID_BKW = 6;
+    public static final int SOLENOID_FWD = 4;
+    public static final int SOLENOID_BKW = 5;
   }
 
   public static class ClimbConstants{
     //motor controller id
-    public static final int LEFT = 10;
-    public static final int RIGHT = 9;
+    public static final int LEFT = 9;
+    public static final int RIGHT = 10;
     //speed
     public static final double CLIMB_SPEED = .5;
   }
