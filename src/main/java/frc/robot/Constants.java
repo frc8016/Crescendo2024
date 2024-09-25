@@ -29,12 +29,12 @@ public final class Constants {
     public static final int FRONT_RIGHT_ID = 3;
     public static final int BACK_RIGHT_ID = 4;
     //encoder constants 
-    public static final int LEFT_ENCODER_A = 5;
-    public static final int RIGHT_ENCODER_A = 1;
-     public static final int LEFT_ENCODER_B = 3;
-    public static final int RIGHT_ENCODER_B = 0;
-    public static final int LEFT_ABSOLUTE_ENCODER = 4;
-    public static final int RIGHT_ABSOLUTE_ENCODER = 2;
+    public static final int LEFT_ENCODER_A = 0;
+    public static final int RIGHT_ENCODER_A = 3;
+     public static final int LEFT_ENCODER_B = 1;
+    public static final int RIGHT_ENCODER_B = 4;
+    public static final int LEFT_ABSOLUTE_ENCODER = 2;
+    public static final int RIGHT_ABSOLUTE_ENCODER = 5;
 
     public static final double kEncoderDistencePerPulse = 0.479 / 4096.0;
     //kinematics 
