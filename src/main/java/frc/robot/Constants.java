@@ -24,14 +24,14 @@ public final class Constants {
 
   public static class DriveTrainConstants {
     //drivetrain motor controller id
-    public static final int FRONT_LEFT_ID = 6;
+    public static final int FRONT_LEFT_ID = 1;
     public static final int BACK_LEFT_ID = 2;
     public static final int FRONT_RIGHT_ID = 3;
     public static final int BACK_RIGHT_ID = 4;
     //encoder constants 
-    public static final int LEFT_ENCODER_A = 0;
+    public static final int LEFT_ENCODER_A = 1;
     public static final int RIGHT_ENCODER_A = 3;
-     public static final int LEFT_ENCODER_B = 1;
+     public static final int LEFT_ENCODER_B = 6;
     public static final int RIGHT_ENCODER_B = 4;
     public static final int LEFT_ABSOLUTE_ENCODER = 2;
     public static final int RIGHT_ABSOLUTE_ENCODER = 5;
@@ -73,17 +73,17 @@ public final class Constants {
     public static final int SHOOTER_LEFT = 7; 
     public static final int SHOOTER_RIGHT = 8;
     //index motor controller
-    public static final int INDEX_ID = 1; 
+    public static final int INDEX_ID = 6; 
     //speeds
     public static final double SHOOTER_SPEED = -.7; 
   
     public static final double INDEX_SPEED = -.7;
     //beambreak id
-    public static final int BEAM_BREAK_SHOOTER_ID = 9;
+   // public static final int BEAM_BREAK_SHOOTER_ID = 9;
   }
 
   public static class IntakeConstants{
-    public static final int BEAM_BREAK_INTAKE_ID1 = 0;
+    public static final int BEAM_BREAK_INTAKE_ID1 = 8;
     //intake motor id
     public static final int INTAKE_MOTOR = 5; 
     //intake motor spped

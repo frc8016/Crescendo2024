@@ -128,8 +128,8 @@ public class RobotContainer {
   .x()
   .toggleOnTrue(
     new ParallelCommandGroup(
-      new StartEndCommand(() -> m_Shooter.runShooter(ShooterConstants.SHOOTER_SPEED), () -> m_Shooter.runShooter(0), m_Shooter),
-      new StartEndCommand(() -> m_Index.runIndex(ShooterConstants.INDEX_SPEED), () -> m_Index.runIndex(0), m_Index)
+      new StartEndCommand(() -> m_Shooter.runShooter(.1), () -> m_Shooter.runShooter(0), m_Shooter),
+      new StartEndCommand(() -> m_Index.runIndex(.1), () -> m_Index.runIndex(0), m_Index)
     ));
 
   /*intake */
