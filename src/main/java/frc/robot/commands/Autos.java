@@ -23,6 +23,9 @@ public final class Autos {
 
   //My Auto (said Josh)
   public static Command AutoN(DriveTrain driveTrain, Index index, Shooter shooter, IntakeMotor intakeMotor, Intake intake){
+    //Variables to quickly adjust forard and rotational voltage (THEY WILL BE NEEDED)
+    int Forward = 0.5;
+    int Rotate = 0.5;
     return
     Commands.sequence(
       
@@ -43,10 +46,10 @@ public final class Autos {
 
     //rotates the robot counterclockwise for 0.5 seconds and then goes forward
       Commands.runOnce(
-        () -> driveTrain.arcadeDrive(0, -1), driveTrain),
+        () -> driveTrain.arcadeDrive(0, -Rotate), driveTrain),
         new WaitCommand(1),
         Commands.runOnce(
-        () -> driveTrain.arcadeDrive(1, 0), driveTrain),
+        () -> driveTrain.arcadeDrive(Forward, 0), driveTrain),
         new WaitCommand(1),
         
         //Turns off
@@ -65,7 +68,7 @@ public final class Autos {
           () -> intakeMotor.runIntake(IntakeConstants.INTAKE_SPEED), intakeMotor),
         new WaitCommand(2),
         Commands.runOnce(
-          ()-> driveTrain.arcadeDrive(1, 0), driveTrain),
+          ()-> driveTrain.arcadeDrive(Forward, 0), driveTrain),
         new WaitCommand(3),
       
         //Turns off
@@ -80,7 +83,7 @@ public final class Autos {
       
       //Goes back to origional postition from rotation
       Commands.runOnce(
-          ()-> driveTrain.arcadeDrive(0, 1), driveTrain),
+          ()-> driveTrain.arcadeDrive(0, Rotate), driveTrain),
         new WaitCommand(1.5),
       
       //Turns off
