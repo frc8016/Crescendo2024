@@ -4,7 +4,9 @@
 
 package frc.robot.commands;
 
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Index;
 import frc.robot.subsystems.Intake;
@@ -22,10 +24,10 @@ public final class Autos {
   }
 
   //My Auto (said Josh)
-  public static Command AutoN(DriveTrain driveTrain, Index index, Shooter shooter, IntakeMotor intakeMotor, Intake intake){
+  public static Command AutoN (DriveTrain driveTrain, Index index, Shooter shooter, IntakeMotor intakeMotor, Intake intake){
     //Variables to quickly adjust forard and rotational voltage (THEY WILL BE NEEDED)
-    int Forward = 0.5;
-    int Rotate = 0.5;
+    int Forward = (int) 0.5;
+    int Rotate = (int) 0.5;
     return
     Commands.sequence(
       
@@ -106,7 +108,7 @@ public final class Autos {
           () -> index.runIndex(0),index))
         
         //Auto has finished running, probably with problems :/
-        );
+    );
   }
   
   public static Command autoGroup(Shooter shooter, Index index, Subsystem[] taxi, Intake intake, IntakeMotor intakeMotor){
