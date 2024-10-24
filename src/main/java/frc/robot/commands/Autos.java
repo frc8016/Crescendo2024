@@ -38,13 +38,9 @@ public final class Autos {
         new WaitCommand(2),
         Commands.runOnce(
           () -> index.runIndex(ShooterConstants.INDEX_SPEED),index),
-        new WaitCommand(3),
+        new WaitCommand(3)),
         
-        //Turns off
-        Commands.runOnce(
-          () -> shooter.runShooter(0), shooter),
-        Commands.runOnce(
-          () -> index.runIndex(0),index)),
+
 
     //rotates the robot counterclockwise for 0.5 seconds and then goes forward
       Commands.runOnce(
@@ -54,10 +50,7 @@ public final class Autos {
         () -> driveTrain.arcadeDrive(Forward, 0), driveTrain),
         new WaitCommand(1),
         
-        //Turns off
-        Commands.runOnce(
-        () -> driveTrain.arcadeDrive(0, 0), driveTrain),
-        new WaitCommand(0.5),
+
       
       //extends the intake, runs the motor to pick it up, and then retracts the intake
       Commands.runOnce(
@@ -88,9 +81,7 @@ public final class Autos {
           ()-> driveTrain.arcadeDrive(0, Rotate), driveTrain),
         new WaitCommand(1.5),
       
-      //Turns off
-      Commands.runOnce(
-        () -> driveTrain.arcadeDrive(0,0)),
+   
       
       //runs the shooter and the index at the same time
       Commands.parallel(
@@ -99,16 +90,12 @@ public final class Autos {
         new WaitCommand(2),
         Commands.runOnce(
           () -> index.runIndex(ShooterConstants.INDEX_SPEED),index),
-        new WaitCommand(3),
+        new WaitCommand(3))
         
-        //Turns off
-        Commands.runOnce(
-          () -> shooter.runShooter(0), shooter),
-        Commands.runOnce(
-          () -> index.runIndex(0),index))
+
         
         //Auto has finished running, probably with problems :/
-    );
+);
   }
   
   public static Command autoGroup(Shooter shooter, Index index, Subsystem[] taxi, Intake intake, IntakeMotor intakeMotor){
