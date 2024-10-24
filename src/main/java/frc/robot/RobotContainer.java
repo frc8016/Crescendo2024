@@ -93,12 +93,11 @@ public class RobotContainer {
       m_autoChooser.addOption("test", 
       Commands.sequence(
         autoTaxi(),
-        autoTaxiReversed()
-      ));
-      
+        autoTaxiReversed()));
 
- 
-   
+      m_autoChooser.addOption("Josh Auto ", 
+    Commands.sequence(
+      Autos.AutoN(m_Shooter, m_Index, m_IntakeMotor)));
 
     SmartDashboard.putData(m_autoChooser);
 

@@ -255,4 +255,9 @@ public final class Autos {
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");
   }
+
+  public static Command AutoN(Shooter m_Shooter, Index m_Index, IntakeMotor m_IntakeMotor) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'AutoN'");
+  }
 }
