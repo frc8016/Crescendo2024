@@ -65,7 +65,7 @@ public class RobotContainer {
     // this is the auto we will be using
     // score preload, taxi and pick up
     m_autoChooser.addOption(
-        "Score + taxi ",
+        "2 Piece Score + taxi + Score ",
         Commands.sequence(
             // shoot
             Autos.autoGroup3(m_Shooter, m_Index, m_IntakeMotor),
@@ -74,11 +74,15 @@ public class RobotContainer {
                 Autos.autoGroup2(m_Intake, m_IntakeMotor),
                 // taxi
                 autoTaxi()),
-            autoTaxiReversed(),
+            autoTaxiReversed(), // goes back to speaker
             Autos.retractIntakeAuto(m_Intake),
             Autos.autoGroup3(m_Shooter, m_Index, m_IntakeMotor)));
 
-    m_autoChooser.addOption("auto no taxi ", Autos.autoGroup3(m_Shooter, m_Index, m_IntakeMotor));
+    m_autoChooser.addOption("Score no taxi ", Autos.autoGroup3(m_Shooter, m_Index, m_IntakeMotor));
+
+    m_autoChooser.addOption(
+        "Shoot + Taxi",
+        Commands.sequence(Autos.autoGroup3(m_Shooter, m_Index, m_IntakeMotor), autoTaxi()));
 
     SmartDashboard.putData(m_autoChooser);
 
@@ -146,7 +150,7 @@ public class RobotContainer {
     // run intake motors with beam break to stop it
     m_driverController
         .y()
-        .whileTrue(
+        .toggleOnTrue(
             new SequentialCommandGroup(
                 new StartEndCommand(
                         () -> m_IntakeMotor.runIntake(-.3),
@@ -157,7 +161,8 @@ public class RobotContainer {
                         () -> m_IntakeMotor.runIntake(.05),
                         () -> m_IntakeMotor.runIntake(0),
                         m_IntakeMotor)
-                    .until(m_Intake.m_BooleanSupplierNot())));
+                    .until(m_Intake.m_BooleanSupplierNot()),
+                new RunCommand(() -> m_Intake.retractIntake())));
 
     m_driverController
         .povUp()
